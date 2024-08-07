@@ -18,7 +18,7 @@ namespace ConsoleCarProject
                 Console.WriteLine("Model yılı: {0}",car.ModelYear);
                 Console.WriteLine("Açıklama: {0}",car.Description);
                 Console.WriteLine("Günlük Ücret: {0}",car.DailyPrice);
-                Console.WriteLine("**********************************");
+                Console.WriteLine("***********************************");
             }
 
             Console.ReadLine();
