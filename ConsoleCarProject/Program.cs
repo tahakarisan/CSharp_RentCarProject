@@ -1,8 +1,12 @@
 ﻿using Business.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Runtime.ConstrainedExecution;
 
 namespace ConsoleCarProject
 {
@@ -10,19 +14,14 @@ namespace ConsoleCarProject
     {
         static void Main(string[] args)
         {
-            CarManager carManager  = new CarManager(new InMemoryCarDal());
+            CarManager carManager = new CarManager(new EFCarDal());
+            List<Car> cars = new List<Car>();
 
-            foreach (var car in carManager.GetAll())
+             foreach (var item in cars)
             {
-                Console.WriteLine("ARABA KİRALAMA");
-                Console.WriteLine("Model yılı: {0}",car.ModelYear);
-                Console.WriteLine("Açıklama: {0}",car.Description);
-                Console.WriteLine("Günlük Ücret: {0}",car.DailyPrice);
-                Console.WriteLine("***********************************");
+                Console.WriteLine(item.Description);
             }
-
-            Console.ReadLine();
         }
-        
     }
 }
+ 
