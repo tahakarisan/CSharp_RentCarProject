@@ -25,7 +25,8 @@ namespace Business.Constant
         public static string UserUpdated = "Kullanıcı güncellendi";
         public static string UserListed = "Kullanıcı listelendi";
         public static string UserGetById = "Kullanıcı ID numarasına göre getirildi";
-
+        public static string ColorGetById = "Renk ID numarasına göre getirildi";
+        public static string ColorListed = "Renk Listelendi";
 
     }
 }

@@ -16,5 +16,10 @@ namespace CoreLayer.Utilities.Results
         {
 
         }
+        public DataSuccesfullResult(string message) : base(default, true,message)
+        {
+
+        }
+
     }
 }

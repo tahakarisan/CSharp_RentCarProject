@@ -12,5 +12,6 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFBrandDal : EFEntityRepositoryBase<Brand, RentCarContext>, IBrandDal
     {
+
     }
 }

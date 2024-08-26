@@ -1,4 +1,5 @@
 ﻿using Business.Concrete;
+using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework;
@@ -14,13 +15,23 @@ namespace ConsoleCarProject
     {
         static void Main(string[] args)
         {
-            CarManager carManager = new CarManager(new EFCarDal());
-            List<Car> cars = new List<Car>();
-
-             foreach (var item in cars)
+            RentalManager rentalManager = new RentalManager(new EFRentalInfoDal());
+            RentalInfo rentalInfo = new RentalInfo();
+            rentalInfo.Id = 1;
+            rentalInfo.ReturnDate = new DateTime(2024, 08, 25);
+            rentalInfo.CarId = 5;
+            rentalInfo.RentDate = DateTime.Now;
+            rentalInfo.CustomerId = 2;
+            var result = rentalManager.RentalAdd(rentalInfo); 
+            if (result.Success == false)
             {
-                Console.WriteLine(item.Description);
+                Console.WriteLine(result.Message);
             }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+            Console.ReadLine();
         }
     }
 }

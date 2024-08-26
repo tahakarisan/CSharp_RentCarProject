@@ -16,5 +16,9 @@ namespace CoreLayer.Utilities.Results
         {
 
         }
+        public DataErrorResult(string message) : base(default,false,message)
+        {
+
+        }
     }
 }

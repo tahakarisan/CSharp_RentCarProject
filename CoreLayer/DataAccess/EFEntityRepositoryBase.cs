@@ -23,7 +23,6 @@ namespace CoreLayer.DataAccess
                 var addedColor = context.Entry(entity);
                 addedColor.State = EntityState.Added;
                 return context.SaveChanges() > 0;
-
             }
         }
 
@@ -44,9 +43,8 @@ namespace CoreLayer.DataAccess
             {
                 return filter == null ? context.Set<TEntity>().ToList() : context.Set<TEntity>().Where(filter).ToList();
             }
-        }
-    
 
+        }
         public bool Update(TEntity entity)
         {
             using (TContext context = new TContext())
