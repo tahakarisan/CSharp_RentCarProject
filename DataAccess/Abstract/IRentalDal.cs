@@ -12,6 +12,5 @@ namespace DataAccess.Abstract
 {
     public interface IRentalDal : IEntityRepository<RentalInfo>
     {
-        void RentalAdd(RentalInfo rentalInfo);
     }
 }

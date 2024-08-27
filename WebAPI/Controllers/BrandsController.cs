@@ -14,6 +14,7 @@ namespace WebAPI.Controllers
         {
             _brandService = brandService;
         }
+
         [HttpGet("GetAllBrand")]
         public IActionResult GetAll()
         {
@@ -22,7 +23,7 @@ namespace WebAPI.Controllers
             {
                 return Ok(result.Data);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
         [HttpPost("AddBrand")]
         public IActionResult Add(Brand brand)
@@ -65,7 +66,7 @@ namespace WebAPI.Controllers
             {
                 return Ok(result.Data);
             }
-            
+
             return BadRequest(result.Message);
         }
     }

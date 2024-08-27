@@ -22,12 +22,12 @@ namespace Business.Concrete
 
         public IResult Add(Brand brand)
         {
-            if (brand.BrandName!= null)
+            if (brand.BrandName == null)
             {
                 return new ErrorResult("Marka Adı boş bırakılamaz");
             }
             _brandDal.Add(brand);
-            return new SuccesfullResult("Marka başarıyla güncellendi");
+            return new SuccesfullResult("Marka başarıyla eklendi");
         }
 
         public IResult Delete(int id)
@@ -42,17 +42,22 @@ namespace Business.Concrete
 
         public IDataResult<List<Brand>> GetAll()
         {
-            if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
+            if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 6)
             {
                 return new DataErrorResult<List<Brand>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll());
+            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(),"Markalar listelendi");
         }
 
         public IDataResult<List<Brand>> GetById(int id)
         {
-            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(b => b.BrandId == id));
+            if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 6)
+            {
+                return new DataErrorResult<List<Brand>>(Messages.ListInMaintenance);
+            }
+            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(b=>b.BrandId==id));
         }
+
 
         public IResult Update(Brand brand)
         {

@@ -63,7 +63,7 @@ namespace WebAPI.Controllers
             {
                 return Ok(result.Message);
             }
-            _carService.Delete(id);
+           
             return BadRequest(result.Message);
         }
         [HttpPut("UpdateCar")]
@@ -74,7 +74,7 @@ namespace WebAPI.Controllers
             {
                 return Ok(result.Message);
             }
-            _carService.Update(car);
+            
             return BadRequest(result.Message);
         }
 

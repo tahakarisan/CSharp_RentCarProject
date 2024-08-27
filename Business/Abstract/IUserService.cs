@@ -10,7 +10,6 @@ namespace Business.Abstract
 {
     public interface IUserService
     {
-
         IResult Add(User user);
         IDataResult<List<User>> GetAll();
         IResult Delete(int id);

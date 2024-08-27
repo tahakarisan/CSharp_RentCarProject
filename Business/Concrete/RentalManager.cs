@@ -24,32 +24,44 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<RentalInfo> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IResult RentalAdd(RentalInfo rentalInfo)
-        {
-            bool isCarAvailable = (_rentalDal.GetAll(r => r.CarId == rentalInfo.CarId && r.ReturnDate > rentalInfo.RentDate).Any());
-
-            if (isCarAvailable==false)
+            if (!_rentalDal.GetAll(r=>r.Id==id).Any())
             {
-                return new SuccesfullResult("Eklendi");
+                return new ErrorResult("Zaten böyle bir veri mevcut değil");
+            }
+            _rentalDal.Delete(id);
+            return new SuccesfullResult("Araba kiralama verisi silindi");
+        }
+
+        public IDataResult<List<RentalInfo>> GetAll()
+        {
+            if (DateTime.Now.Hour==4)
+            {
+                return new DataErrorResult<List<RentalInfo>>(Messages.ListInMaintenance);
+            }
+            
+            return new DataSuccesfullResult<List<RentalInfo>>(_rentalDal.GetAll(),"Kiralamalar listelendi");
+        }
+
+        public IResult Add(RentalInfo rentalInfo)
+        {
+            if (!_rentalDal.GetAll(r => r.CarId == rentalInfo.CarId && r.ReturnDate > rentalInfo.RentDate).Any())
+            {
+                return new ErrorResult("Bu arabayı kiralayamazsınız");
                 
             }
             _rentalDal.Add(rentalInfo);
-           
-            return new ErrorResult("Eklenemez");
+            return new SuccesfullResult("Araba başarıyla kiralandı");
            
         }
 
-        public IResult Update(int id)
+        public IResult Update(RentalInfo rentalInfo)
         {
-            throw new NotImplementedException();
+            if (!_rentalDal.GetAll(r=>r.Id==rentalInfo.Id).Any())
+            {
+                return new ErrorResult("Güncellemek istediğiniz veri mevcut değil");
+            }
+            _rentalDal.Update(rentalInfo);
+            return new SuccesfullResult("Veri güncellendi");
         }
     }
 }

@@ -12,9 +12,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ICarService,CarManager>();
+builder.Services.AddSingleton<IUserService,UserManager>();
+builder.Services.AddSingleton<IUserDal,EFUserDal>();
+builder.Services.AddSingleton<IRentalService,RentalManager>();
+builder.Services.AddSingleton<IRentalDal,EFRentalInfoDal>();
 builder.Services.AddSingleton<IColorService,ColorManager>();
 builder.Services.AddSingleton<ICustomerService,CustomerManager>();
 builder.Services.AddSingleton<ICustomerDal,EFCustomerDal>();
+builder.Services.AddSingleton<IBrandService,BrandManager>();
+builder.Services.AddSingleton<IBrandDal,EFBrandDal>();
 builder.Services.AddSingleton<IColorDal,EFColorDal>();
 builder.Services.AddSingleton<ICarDal,EFCarDal>();
 

@@ -22,16 +22,7 @@ namespace ConsoleCarProject
             rentalInfo.CarId = 5;
             rentalInfo.RentDate = DateTime.Now;
             rentalInfo.CustomerId = 2;
-            var result = rentalManager.RentalAdd(rentalInfo); 
-            if (result.Success == false)
-            {
-                Console.WriteLine(result.Message);
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
-            Console.ReadLine();
+          
         }
     }
 }

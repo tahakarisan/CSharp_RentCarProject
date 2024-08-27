@@ -15,15 +15,6 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFRentalInfoDal : EFEntityRepositoryBase<RentalInfo, RentCarContext>, IRentalDal
     {
-        public void RentalAdd(RentalInfo rentalInfo)
-        {
-            using (RentCarContext context = new RentCarContext())
-            {
-                var addRent = context.Entry(rentalInfo);
-                addRent.State = EntityState.Added;
-                context.SaveChanges();
-            }
-        }
 
         /// <summary>
         /// CarId'ye göre aracın müsaitlik durumunu belirtir.
