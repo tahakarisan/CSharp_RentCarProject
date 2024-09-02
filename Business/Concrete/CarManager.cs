@@ -1,11 +1,15 @@
 ﻿
 using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.AddValidation;
+using Business.ValidationRules.UpdateValidation;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -38,12 +42,10 @@ namespace Business.Concrete
         {
             return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
+
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.Description.Length < 5)
-            {
-                return new ErrorResult(Messages.CarNotAdded);
-            }
             _carDal.Add(car);
             return new SuccesfullResult(Messages.CarAdded);
             
@@ -62,12 +64,9 @@ namespace Business.Concrete
             return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(c => c.Id == id), Messages.CarGetById);
         }
 
+        [ValidationAspect(typeof(UpdateCarValidator))]
         public IResult Update(Car car)
         {
-            if (!_carDal.GetAll(c => c.Id == car.Id).Any())
-            {
-                return new ErrorResult("Araba güncellenemedi");
-            }
             _carDal.Update(car);
             return new SuccesfullResult("Araba Güncellendi");
         }

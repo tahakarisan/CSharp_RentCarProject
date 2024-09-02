@@ -1,11 +1,15 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.AddValidation;
+using Business.ValidationRules.UpdateValidation;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +24,9 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
-            if (brand.BrandName == null)
-            {
-                return new ErrorResult("Marka Adı boş bırakılamaz");
-            }
             _brandDal.Add(brand);
             return new SuccesfullResult("Marka başarıyla eklendi");
         }
@@ -58,13 +59,9 @@ namespace Business.Concrete
             return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(b=>b.BrandId==id));
         }
 
-
+        [ValidationAspect(typeof(UpdateBrandValidator))]
         public IResult Update(Brand brand)
         {
-            if (!_brandDal.GetAll(b => b.BrandId == brand.BrandId).Any())
-            {
-                return new ErrorResult("Zaten böyle bir veri bulunmuyor");
-            }
             _brandDal.Update(brand);
             return new SuccesfullResult("Marka başarıyla güncellendi");
         }

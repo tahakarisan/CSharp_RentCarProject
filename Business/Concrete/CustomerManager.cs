@@ -1,11 +1,15 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.AddValidation;
+using Business.ValidationRules.UpdateValidation;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,15 +23,11 @@ namespace Business.Concrete
         {
             _customerDal = customerDal;
         }
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
-            if (customer.CompanyName != null)
-            {
-                return new ErrorResult(Messages.ErrorUserAdded);
-            }
             _customerDal.Add(customer);
             return new SuccesfullResult("Kullanıcı Eklendi");
-           
         }
 
         public IResult Delete(int id)
@@ -40,13 +40,9 @@ namespace Business.Concrete
             return new SuccesfullResult("Müşteri silindi");
         }
 
-
+        [ValidationAspect(typeof(UpdateCustomerValidator))]
         public IResult Update(Customer customer)
         {
-            if (!_customerDal.GetAll(c => c.Id == customer.Id).Any())
-            {
-                return new ErrorResult("Güncellemek istediğiniz müşteri bulunamadı!");
-            }
             _customerDal.Update(customer);
             return new SuccesfullResult("Müşteri başarıyla güncellendi");
         }

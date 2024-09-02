@@ -1,11 +1,15 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.AddValidation;
+using Business.ValidationRules.UpdateValidation;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
@@ -24,7 +28,7 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            if (!_rentalDal.GetAll(r=>r.Id==id).Any())
+            if (!_rentalDal.GetAll(r => r.Id == id).Any())
             {
                 return new ErrorResult("Zaten böyle bir veri mevcut değil");
             }
@@ -34,32 +38,24 @@ namespace Business.Concrete
 
         public IDataResult<List<RentalInfo>> GetAll()
         {
-            if (DateTime.Now.Hour==4)
+            if (DateTime.Now.Hour == 4)
             {
                 return new DataErrorResult<List<RentalInfo>>(Messages.ListInMaintenance);
             }
-            
-            return new DataSuccesfullResult<List<RentalInfo>>(_rentalDal.GetAll(),"Kiralamalar listelendi");
+
+            return new DataSuccesfullResult<List<RentalInfo>>(_rentalDal.GetAll(), "Kiralamalar listelendi");
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(RentalInfo rentalInfo)
         {
-            if (!_rentalDal.GetAll(r => r.CarId == rentalInfo.CarId && r.ReturnDate > rentalInfo.RentDate).Any())
-            {
-                return new ErrorResult("Bu arabayı kiralayamazsınız");
-                
-            }
             _rentalDal.Add(rentalInfo);
             return new SuccesfullResult("Araba başarıyla kiralandı");
-           
-        }
 
+        }
+        [ValidationAspect(typeof(UpdateRentalValidator))]
         public IResult Update(RentalInfo rentalInfo)
         {
-            if (!_rentalDal.GetAll(r=>r.Id==rentalInfo.Id).Any())
-            {
-                return new ErrorResult("Güncellemek istediğiniz veri mevcut değil");
-            }
             _rentalDal.Update(rentalInfo);
             return new SuccesfullResult("Veri güncellendi");
         }

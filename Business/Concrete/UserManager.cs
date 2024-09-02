@@ -1,10 +1,14 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.AddValidation;
+using Business.ValidationRules.UpdateValidation;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -21,13 +25,9 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
-            if (user.FirstName == null || user.Email == null || user.Password == null)
-            {
-                return new ErrorResult("Kullanıcıyı eklerken bilgilerinizi gözden geçiriniz");
-            }
             _userDal.Add(user);
             return new SuccesfullResult("Kullanıcı eklendi");
          
@@ -53,12 +53,9 @@ namespace Business.Concrete
             return new DataSuccesfullResult<List<User>>(_userDal.GetAll(u=>u.Id==id),Messages.UserGetById);
         }
 
+        [ValidationAspect(typeof(UpdateUserValidator))]
         public IResult Update(User user)
         {
-            if (!_userDal.GetAll(u=>u.Id==user.Id).Any())
-            {
-                return new ErrorResult("Güncellemek istediğiniz veri sistemimizde kayıtlı değil!");
-            }
             _userDal.Update(user);
             return new SuccesfullResult(Messages.UserUpdated);
         }

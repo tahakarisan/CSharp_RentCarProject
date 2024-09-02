@@ -1,10 +1,14 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.AddValidation;
+using Business.ValidationRules.UpdateValidation;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,21 +35,15 @@ namespace Business.Concrete
         {
             return new DataSuccesfullResult<List<Color>>(_colorDal.GetAll(c=>c.ColorId==id), Messages.ColorGetById);
         }
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color color)
         {
-            if (color.ColorName==null)
-            {
-                return new ErrorResult("Renk Eklenemedi");
-            }
             _colorDal.Add(color);
             return new SuccesfullResult("Renk başarıyla eklendi");
         }
+        [ValidationAspect(typeof(UpdateColorValidator))]
         public IResult Update(Color color) 
         {
-            if (!_colorDal.GetAll(c=>c.ColorId==color.ColorId).Any())
-            {
-                return new ErrorResult("Renk bilgileri güncellenemedi!");
-            }
             _colorDal.Update(color);
             return new SuccesfullResult("Renk bilgileri başarıyla güncellendi");
         }
