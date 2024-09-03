@@ -70,5 +70,15 @@ namespace Business.Concrete
             _carDal.Update(car);
             return new SuccesfullResult("Araba Güncellendi");
         }
+        private IResult IsDescriptionInValid(Car car)
+        {
+            var result = _carDal.GetAll(c=>c.Description==car.Description).Any();
+            if (result)
+            {
+                return new ErrorResult("Bu açıklamaya sahip araba mevcut");
+            }
+            return new SuccesfullResult();
+        }
     }
+
 }

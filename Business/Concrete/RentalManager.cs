@@ -20,10 +20,12 @@ namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
+        ICarService _carService;
         IRentalDal _rentalDal;
-        public RentalManager(IRentalDal rentalDal)
+        public RentalManager(IRentalDal rentalDal, ICarService carService)
         {
             _rentalDal = rentalDal;
+            _carService = carService;
         }
 
         public IResult Delete(int id)
@@ -49,8 +51,13 @@ namespace Business.Concrete
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(RentalInfo rentalInfo)
         {
-            _rentalDal.Add(rentalInfo);
-            return new SuccesfullResult("Araba başarıyla kiralandı");
+            if (IsTheCarOverloaded(rentalInfo).Success)
+            {
+                _rentalDal.Add(rentalInfo);
+                return new SuccesfullResult("Araba başarıyla kiralandı");
+            }
+
+            return new ErrorResult("Araba kiralanamaz çünkü şirket politikamıza göre araçlarımız ayda maksimum 10 kere kiralanabilir");
 
         }
         [ValidationAspect(typeof(UpdateRentalValidator))]
@@ -58,6 +65,16 @@ namespace Business.Concrete
         {
             _rentalDal.Update(rentalInfo);
             return new SuccesfullResult("Veri güncellendi");
+        }
+        public IResult IsTheCarOverloaded(RentalInfo rentalInfo)
+        {
+           
+            var result = _rentalDal.GetAll(r => r.CarId == rentalInfo.CarId && r.RentDate>rentalInfo.RentDate.AddMonths(-1));
+            if (result.Count > 10)
+            {
+                return new ErrorResult();
+            }
+            return new SuccesfullResult();
         }
     }
 }
