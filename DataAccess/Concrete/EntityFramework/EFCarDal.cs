@@ -19,6 +19,14 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFCarDal : EFEntityRepositoryBase<Car, RentCarContext>, ICarDal
     {
+        public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            using (RentCarContext context = new RentCarContext())
+            {
+                return context.Set<Car>().FirstOrDefault(filter);
+            }
+        }
+
         public void GetCarDto()
         {
             using (RentCarContext context = new RentCarContext())
@@ -33,15 +41,15 @@ namespace DataAccess.Concrete.EntityFramework
                                  Description = c.Description,
                                  BrandId = Convert.ToString(b.BrandId)
                              };
-                 result.ToList();
+                result.ToList();
             }
 
-            
+
         }
     }
 
-    
 
-    
+
+
 
 }

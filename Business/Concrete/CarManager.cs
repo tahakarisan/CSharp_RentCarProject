@@ -79,6 +79,20 @@ namespace Business.Concrete
             }
             return new SuccesfullResult();
         }
+        public IDataResult<Car> GetById(int carId)
+        {
+            // ID'ye göre aracı getir
+            var car = _carDal.Get(c => c.Id == carId);
+
+            if (car == null)
+            {
+                return new DataErrorResult<Car>("Araba bulunamadı.");  // Eğer araç bulunamazsa hata döndür
+            }
+
+            return new DataSuccesfullResult<Car>(car, "Araba başarıyla bulundu.");  // Başarılı bir şekilde araç bulundu
+        }
+
+
     }
 
 }

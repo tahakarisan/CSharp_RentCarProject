@@ -3,8 +3,10 @@ using Business.Constant;
 using Business.ValidationRules.AddValidation;
 using Business.ValidationRules.UpdateValidation;
 using CoreLayer.Aspects.Autofac;
+using CoreLayer.Utilities.Business;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Abstract;
 using Entities.Concrete;
 using System;
@@ -13,6 +15,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,13 +54,24 @@ namespace Business.Concrete
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(RentalInfo rentalInfo)
         {
-            if (IsTheCarOverloaded(rentalInfo).Success)
+            IResult result = BusinessRules.Run(IsTheCarOverloaded(rentalInfo),IsItForRent(rentalInfo),DailyRentalLimit(rentalInfo));
+            if (result == null)
             {
                 _rentalDal.Add(rentalInfo);
-                return new SuccesfullResult("Araba başarıyla kiralandı");
+                return new SuccesfullResult("Kiralama işlemi başarılı");
+            }
+            if (result.Success)
+            {
+                if (FirstRent(rentalInfo).Success)
+                {
+                   _rentalDal.Add(rentalInfo);
+                    return new SuccesfullResult("Kiralama ücretine ilk müşteri olmanıza özel %40 indirim yapıldı ");
+                }
+                _rentalDal.Add(rentalInfo);
+                return new SuccesfullResult("Kiralama işlemi başarılı");
             }
 
-            return new ErrorResult("Araba kiralanamaz çünkü şirket politikamıza göre araçlarımız ayda maksimum 10 kere kiralanabilir");
+            return new ErrorResult(result.Message);
 
         }
         [ValidationAspect(typeof(UpdateRentalValidator))]
@@ -66,15 +80,51 @@ namespace Business.Concrete
             _rentalDal.Update(rentalInfo);
             return new SuccesfullResult("Veri güncellendi");
         }
-        public IResult IsTheCarOverloaded(RentalInfo rentalInfo)
+        //---------------------------------------------------------------------------------------------------------------------------------------------------------------
+        private IResult IsTheCarOverloaded(RentalInfo rentalInfo)
         {
            
             var result = _rentalDal.GetAll(r => r.CarId == rentalInfo.CarId && r.RentDate>rentalInfo.RentDate.AddMonths(-1));
             if (result.Count > 10)
             {
-                return new ErrorResult();
+                return new ErrorResult("Şirket politikamıza göre bir araç ayda maksimum 10 kere kiralanabilir");
             }
             return new SuccesfullResult();
+        }
+        private IResult IsItForRent(RentalInfo rentalInfo)
+        {
+            var result = _rentalDal.GetAll(r=>r.ReturnDate>rentalInfo.RentDate);
+            if (result.Any())
+            {
+                return new ErrorResult("Araba kiralık durumda. Şirkete hala teslim edilmedi");
+            }
+            return new SuccesfullResult();
+        }
+        private IResult DailyRentalLimit(RentalInfo rentalInfo)
+        {
+            var result = _rentalDal.GetAll(r=>r.CustomerId==rentalInfo.CustomerId).FirstOrDefault();
+            bool checkRentDate = result.RentDate.AddDays(+1) >= rentalInfo.RentDate;
+            if(checkRentDate)
+            {
+                return new ErrorResult("Günlük araba kiralama hakkınız bitmiştir");
+            }
+            return new SuccesfullResult();
+        }
+        private IResult FirstRent(RentalInfo rentalInfo)
+        {
+            var result = _rentalDal.GetAll(r => r.CustomerId == rentalInfo.CustomerId).FirstOrDefault();
+
+            if (result == null)
+            {
+                var car = _carService.GetById(rentalInfo.CarId);
+                if (car == null)
+                {
+                    return new ErrorResult("Araba bulunamadı.");  // Eğer araç bulunamazsa hata döndür
+                }
+                var salePrice = car.Data.DailyPrice * 0.6m;
+                return new SuccesfullResult();
+            }    
+            return new ErrorResult();
         }
     }
 }

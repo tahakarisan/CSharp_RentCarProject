@@ -18,6 +18,7 @@ namespace Business.ValidationRules.AddValidation
             RuleFor(u => u.LastName).MinimumLength(2);
 
         }
+
     }
 }
 
