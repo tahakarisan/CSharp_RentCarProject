@@ -1,11 +1,11 @@
-﻿using Entities.Abstract;
+﻿using CoreLayer.Entities;
 
-namespace DataAccess.Concrete.EntityFramework
+namespace Entities.Concrete
 {
-    public class Image : IEntity
+    public class CarImage : BaseEntity
     {
-        public int Id { get; set; }
-        public string ImageName { get; set; }
-        public byte[]  CarImage { get; set; }
+        public string Name { get; set; }
+        public string ImagePath { get; set; }
+        public int CarId { get; set; }
     }
 }

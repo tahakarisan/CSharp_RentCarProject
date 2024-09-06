@@ -1,39 +1,26 @@
 ﻿using Business.Abstract;
 using CoreLayer.Utilities.Results;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccess.Abstract;
+using Entities.Concrete;
 
 namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
-        ICarImageService _carImageService;
-        public CarImageManager(ICarImageService carImageService)
+        ICarImageDal _carImageDal;
+        public CarImageManager(ICarImageDal carImageDal)
         {
-                _carImageService = carImageService;
+            _carImageDal = carImageDal;
         }
-        public IResult UploadImage(IFormFile file)
+        public IResult UploadImage(CarImage carImage)
         {
-            if (file.Length==0 || file==null)
+            var result = _carImageDal.Add(carImage);
+            if (result)
             {
-                return new ErrorResult();
+                return new SuccesfullResult();
             }
-            _carImageService.UploadImage(file);
-            return new SuccesfullResult();
-        }
-
-        public IResult UpdateImage(IFormFile file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IResult DeleteImage(IFormFile file)
-        {
-            throw new NotImplementedException();
+            return new ErrorResult();
+            
         }
     }
 }

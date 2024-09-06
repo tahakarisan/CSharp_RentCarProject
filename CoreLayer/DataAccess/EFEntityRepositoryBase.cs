@@ -1,13 +1,10 @@
 ﻿
-using Entities.Abstract;
+using CoreLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace CoreLayer.DataAccess
 {
@@ -44,6 +41,13 @@ namespace CoreLayer.DataAccess
                 return filter == null ? context.Set<TEntity>().ToList() : context.Set<TEntity>().Where(filter).ToList();
             }
 
+        }
+        public TEntity GetById(Expression<Func<TEntity, bool>> filter = null)
+        {
+            using (TContext context = new TContext())
+            {
+                return filter == null ? context.Set<TEntity>().FirstOrDefault() : context.Set<TEntity>().Where(filter).FirstOrDefault();
+            }
         }
         public bool Update(TEntity entity)
         {

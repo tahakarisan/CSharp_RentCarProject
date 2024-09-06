@@ -15,13 +15,13 @@ namespace ConsoleCarProject
     {
         static void Main(string[] args)
         {
-            RentalManager rentalManager = new RentalManager(new EFRentalInfoDal());
-            RentalInfo rentalInfo = new RentalInfo();
-            rentalInfo.Id = 1;
-            rentalInfo.ReturnDate = new DateTime(2024, 08, 25);
-            rentalInfo.CarId = 5;
-            rentalInfo.RentDate = DateTime.Now;
-            rentalInfo.CustomerId = 2;
+            //RentalManager rentalManager = new RentalManager(new EFRentalInfoDal());
+            //RentalInfo rentalInfo = new RentalInfo();
+            //rentalInfo.Id = 1;
+            //rentalInfo.ReturnDate = new DateTime(2024, 08, 25);
+            //rentalInfo.CarId = 5;
+            //rentalInfo.RentDate = DateTime.Now;
+            //rentalInfo.CustomerId = 2;
           
         }
     }

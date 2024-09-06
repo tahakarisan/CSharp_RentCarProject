@@ -7,7 +7,7 @@ namespace Business.ValidationRules.UpdateValidation
     {
         public UpdateColorValidator()
         {
-            RuleFor(u => u.ColorId).NotEmpty();
+            RuleFor(u => u.Id).NotEmpty();
             RuleFor(c => c.ColorName).NotEmpty().MinimumLength(2);
         }
     }

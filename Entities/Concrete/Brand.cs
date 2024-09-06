@@ -1,13 +1,9 @@
-﻿using Entities.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CoreLayer.Entities;
 
 namespace Entities.Concrete
 {
-    public class Brand : IEntity
+    public class Brand : BaseEntity
     {
-        public int BrandId { get; set; }
         public string BrandName { get; set; }
     }
 }

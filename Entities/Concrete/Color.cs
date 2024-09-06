@@ -1,13 +1,9 @@
-﻿using Entities.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CoreLayer.Entities;
 
 namespace Entities.Concrete
 {
-    public class Color:IEntity
+    public class Color: BaseEntity
     {
-        public int ColorId { get; set; }
         public string ColorName { get; set; }
     }
 }

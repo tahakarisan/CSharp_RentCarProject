@@ -1,10 +1,8 @@
 ﻿
-using Entities.Abstract;
-using Entities.Concrete;
+using CoreLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace DataAccess.Abstract
 {
@@ -14,6 +12,7 @@ namespace DataAccess.Abstract
         bool Add(T entity);
         bool Update(T entity);
         bool Delete(int id);
+        T GetById(Expression<Func<T, bool>> filter = null);
 
     }
 }

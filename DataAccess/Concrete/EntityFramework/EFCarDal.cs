@@ -1,19 +1,11 @@
 ﻿using CoreLayer.DataAccess;
 using DataAccess.Abstract;
-using Entities;
-using Entities.Abstract;
 using Entities.Concrete;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.PortableExecutable;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
@@ -33,13 +25,13 @@ namespace DataAccess.Concrete.EntityFramework
             {
                 var result = from c in context.Cars
                              join b in context.Brands
-                             on c.BrandId equals b.BrandId
+                             on c.BrandId equals b.Id
                              select new CarDto
                              {
                                  DailyPrice = c.DailyPrice,
                                  Id = c.Id,
                                  Description = c.Description,
-                                 BrandId = Convert.ToString(b.BrandId)
+                                 BrandId = Convert.ToString(b.Id)
                              };
                 result.ToList();
             }

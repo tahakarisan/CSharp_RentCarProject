@@ -4,8 +4,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EFColorDal : EFEntityRepositoryBase<Color, RentCarContext>, IColorDal
+    public class EFCarImageDal : EFEntityRepositoryBase<CarImage, RentCarContext>, ICarImageDal
     {
-  
     }
 }

@@ -33,7 +33,7 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            if (!_brandDal.GetAll(b=>b.BrandId==id).Any())
+            if (!_brandDal.GetAll(b=>b.Id==id).Any())
             {
                 return new ErrorResult("Zaten böyle bir veri bulunmuyor");
             }
@@ -56,7 +56,7 @@ namespace Business.Concrete
             {
                 return new DataErrorResult<List<Brand>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(b=>b.BrandId==id));
+            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(b=>b.Id==id));
         }
 
         [ValidationAspect(typeof(UpdateBrandValidator))]

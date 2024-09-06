@@ -1,16 +1,10 @@
-﻿using Entities.Abstract;
+﻿using CoreLayer.Entities;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class RentalInfo: IEntity
+    public class RentalInfo: BaseEntity
     {
-        public int Id { get; set; }
         public int CarId { get; set; }
         public int CustomerId { get; set; }
         public DateTime RentDate { get; set; }

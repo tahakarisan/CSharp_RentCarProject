@@ -7,7 +7,7 @@ namespace Business.ValidationRules.UpdateValidation
     {
         public UpdateBrandValidator()
         {
-            RuleFor(u => u.BrandId).NotEmpty();
+            RuleFor(u => u.Id).NotEmpty();
             RuleFor(b => b.BrandName).MinimumLength(3);
         }
     }

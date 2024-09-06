@@ -6,18 +6,10 @@ using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Business;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
-using DataAccess.Concrete.EntityFramework;
-using Entities.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {

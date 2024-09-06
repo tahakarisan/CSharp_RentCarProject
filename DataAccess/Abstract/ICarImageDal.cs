@@ -2,7 +2,8 @@
 
 namespace DataAccess.Abstract
 {
-    public interface IRentalDal : IEntityRepository<RentalInfo>
+    public interface ICarImageDal: IEntityRepository<CarImage>
     {
+       
     }
 }

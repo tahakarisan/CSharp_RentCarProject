@@ -20,7 +20,7 @@ namespace Business.Concrete
         IColorDal _colorDal;
         public ColorManager(IColorDal colorDal)
         {
-           _colorDal = colorDal;
+            _colorDal = colorDal;
         }
         public IDataResult<List<Color>> GetAll()
         {
@@ -33,7 +33,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetById(int id)
         {
-            return new DataSuccesfullResult<List<Color>>(_colorDal.GetAll(c=>c.ColorId==id), Messages.ColorGetById);
+            return new DataSuccesfullResult<List<Color>>(_colorDal.GetAll(c => c.Id == id), Messages.ColorGetById);
         }
         [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color color)
@@ -42,14 +42,14 @@ namespace Business.Concrete
             return new SuccesfullResult("Renk başarıyla eklendi");
         }
         [ValidationAspect(typeof(UpdateColorValidator))]
-        public IResult Update(Color color) 
+        public IResult Update(Color color)
         {
             _colorDal.Update(color);
             return new SuccesfullResult("Renk bilgileri başarıyla güncellendi");
         }
-        public IResult Delete(int id) 
+        public IResult Delete(int id)
         {
-            if (!_colorDal.GetAll(c=>c.ColorId==id).Any())
+            if (!_colorDal.GetAll(c => c.Id == id).Any())
             {
                 return new ErrorResult("Girmiş olduğunuz bilgilerdeki ile uyuşan veri zaten yok");
             }
