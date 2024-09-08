@@ -9,5 +9,6 @@ namespace DataAccess.Abstract
     public interface ICarDal : IEntityRepository<Car>
     {
         Car Get(Expression<Func<Car, bool>> filter);
+
     }
 }

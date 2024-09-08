@@ -6,6 +6,6 @@ namespace Business.Abstract
 {
     public interface ICarImageService
     {
-        IResult UploadImage(CarImage carImage);
+        IResult UploadImage(UploadImageDTO fileModel);
     }
 }

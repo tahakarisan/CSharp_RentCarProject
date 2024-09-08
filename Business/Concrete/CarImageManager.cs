@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
+using CoreLayer.Helpers;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 
 namespace Business.Concrete
 {
@@ -12,15 +14,16 @@ namespace Business.Concrete
         {
             _carImageDal = carImageDal;
         }
-        public IResult UploadImage(CarImage carImage)
-        {
-            var result = _carImageDal.Add(carImage);
-            if (result)
-            {
-                return new SuccesfullResult();
-            }
-            return new ErrorResult();
-            
+
+        SaveImageAttribute _saveImageAttribute = new SaveImageAttribute();
+        [SaveImage]
+
+        public IResult UploadImage(UploadImageDTO fileModel)
+        { 
+            _saveImageAttribute.Save(fileModel);
+            return new SuccesfullResult();
         }
+       //saveattribute
     }
 }
+            

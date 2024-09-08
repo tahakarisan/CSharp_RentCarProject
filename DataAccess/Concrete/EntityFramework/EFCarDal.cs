@@ -18,7 +18,7 @@ namespace DataAccess.Concrete.EntityFramework
                 return context.Set<Car>().FirstOrDefault(filter);
             }
         }
-
+  
         public void GetCarDto()
         {
             using (RentCarContext context = new RentCarContext())

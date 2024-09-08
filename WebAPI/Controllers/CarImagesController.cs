@@ -2,6 +2,7 @@
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 
 namespace WebAPI.Controllers
@@ -20,39 +21,22 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult UploadImage([FromForm] UploadImageDTO fileModel)//Post'un default'u FromBody, Get'in FromQuery,
         {
-            if (fileModel != null)
+            var result = _carImageService.UploadImage(fileModel);
+            _carImageService.Equals(result);
+            if (result.Success)
             {
-                try
-                {
-                    var extent = Path.GetExtension(fileModel.RequestedFormFile.FileName); //dosya uzantısını aldım file nameine göre
-                    var randomName = ($"{Guid.NewGuid()}{extent}");
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Images", randomName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        fileModel.RequestedFormFile.CopyTo(stream);
-                    }
-                    CarImage carImage = new CarImage
-                    {
-                        CarId = fileModel.CarId,
-                        ImagePath = path
-                    };
-                    _carImageService.UploadImage(carImage);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                return Ok(result.Message);
             }
-            return Ok();
+            return BadRequest(result.Message);
         }
+        //taha
 
 
         //Endpoint
 
         /*
          * Bussiness'da yapılacak.
-        1-IFormFile'dan gelen dosyayı WebAPI'nin içerisindeki wwwroot/Images dosyasının içerisine kayıt eden bir Helper sınıfı yazılacak.
+        1-IFormFile'dan gelen dosyayı WebAPI'nin içerisindeki wwwroot/Images dosyasının içerisine kayıt eden bir Helper sınıfı yazılacak.+
         2-UploadImage methodunda önce bu yazılan helper dosyayı kayıt edecek ve geriye dosya yolunu,işlem sonucunu dönecek.
         3-Eğer dosya kaydetme işlemi başarılı ise CarImages tablosuna CarId,ImagePath diye eklenicek.         
          */
