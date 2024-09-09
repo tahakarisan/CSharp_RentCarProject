@@ -14,7 +14,11 @@ namespace CoreLayer.Utilities.Results
             Success = success;
             Message = message;
         }
-        public DataResult(T data, bool success)
+        public DataResult(T data, bool success):this(success)
+        {
+
+        }
+        public DataResult(bool success)
         {
 
         }

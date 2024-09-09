@@ -2,7 +2,6 @@
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 
 namespace WebAPI.Controllers
@@ -22,14 +21,44 @@ namespace WebAPI.Controllers
         public IActionResult UploadImage([FromForm] UploadImageDTO fileModel)//Post'un default'u FromBody, Get'in FromQuery,
         {
             var result = _carImageService.UploadImage(fileModel);
-            _carImageService.Equals(result);
             if (result.Success)
             {
                 return Ok(result.Message);
             }
             return BadRequest(result.Message);
         }
-        //taha
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var result = _carImageService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Data);
+        }
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var result = _carImageService.DeleteImage(id);
+            if (result.Success)
+            {
+                return Ok(result.Message);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpPut]
+        public IActionResult Update([FromForm]UploadImageDTO fileModel)
+        {
+            var result = _carImageService.UpdateImage(fileModel);
+            if (result.Success)
+            {
+                return Ok(result.Message);
+            }
+            return BadRequest(result.Message);
+        }
+
+
 
 
         //Endpoint

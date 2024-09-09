@@ -48,11 +48,10 @@ namespace Business.Concrete
         {
             _carDal.Add(car);
             return new SuccesfullResult(Messages.CarAdded);
-            
         }
         public IResult Delete(int id)
         {
-            if (!_carDal.GetAll(c=>c.Id==id).Any())
+            if (!_carDal.GetAll(c => c.Id == id).Any())
             {
                 return new ErrorResult("Araba silinemedi");
             }
@@ -72,7 +71,7 @@ namespace Business.Concrete
         }
         private IResult IsDescriptionInValid(Car car)
         {
-            var result = _carDal.GetAll(c=>c.Description==car.Description).Any();
+            var result = _carDal.GetAll(c => c.Description == car.Description).Any();
             if (result)
             {
                 return new ErrorResult("Bu açıklamaya sahip araba mevcut");
@@ -88,6 +87,7 @@ namespace Business.Concrete
             {
                 return new DataErrorResult<Car>("Araba bulunamadı.");  // Eğer araç bulunamazsa hata döndür
             }
+            _carDal.Get(c => c.Id == carId);
 
             return new DataSuccesfullResult<Car>(car, "Araba başarıyla bulundu.");  // Başarılı bir şekilde araç bulundu
         }
