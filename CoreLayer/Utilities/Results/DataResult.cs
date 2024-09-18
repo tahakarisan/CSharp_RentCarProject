@@ -6,27 +6,19 @@ using System.Threading.Tasks;
 
 namespace CoreLayer.Utilities.Results
 {
-    public class DataResult<T> : IDataResult<T>
+    public class DataResult<T> : Result, IDataResult<T>
     {
-        public DataResult(T data, bool success, string message) : this(data, success)
+        public DataResult(T data, bool success, string message) : base(success, message)
         {
             Data = data;
-            Success = success;
-            Message = message;
-        }
-        public DataResult(T data, bool success):this(success)
-        {
 
         }
-        public DataResult(bool success)
+        public DataResult(T data, bool success) : base(success)
         {
-
+            Data = data;
         }
-        public string Message { get; }
 
         public T Data { get; }
-
-        public bool Success { get; }
 
     }
 }

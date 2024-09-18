@@ -1,5 +1,4 @@
-﻿using CoreLayer.Entities;
-namespace Entities.Concrete
+﻿namespace CoreLayer.Entities.Concrete
 {
     public class User : BaseEntity
     {

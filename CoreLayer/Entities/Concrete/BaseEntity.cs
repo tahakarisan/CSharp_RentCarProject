@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CoreLayer.Entities.Abstract;
 
-namespace CoreLayer.Entities
+namespace CoreLayer.Entities.Concrete
 {
     public class BaseEntity : IEntity
     {

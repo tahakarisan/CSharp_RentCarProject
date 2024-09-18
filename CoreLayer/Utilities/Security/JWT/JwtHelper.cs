@@ -1,6 +1,6 @@
-﻿using CoreLayer.Utilities.Security.Encryption;
-using DataAccess.Concrete.Context;
-using Entities.Concrete;
+﻿
+using CoreLayer.Entities.Concrete;
+using CoreLayer.Utilities.Security.Encryption;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -14,57 +14,51 @@ using System.Threading.Tasks;
 
 namespace CoreLayer.Utilities.Security.JWT
 {
-    public class JwtTokenHelper : ITokenHelper
+    public class JwtHelper : ITokenHelper
     {
         IConfiguration Configuration;
         TokenOptions _tokenOptions;
-        DateTime _accessTokenExpiration;
-        public JwtTokenHelper(IConfiguration configuration)
+        DateTime _accessExpiration;
+        public JwtHelper(IConfiguration configuration)
         {
             Configuration = configuration;
             _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
         }
+
         public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         {
-            _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
-            var securityKey = _tokenOptions.SecurityKey;
+            _accessExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
+            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
             var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
-            var jwt = CreateJwtSecurityToken(_tokenOptions,signingCredentials,user,operationClaims);
-            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var token = jwtSecurityTokenHandler.WriteToken(jwt);
+            var jwt = CreateJwtSecurityToken(_tokenOptions,user,operationClaims,signingCredentials);
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             return new AccessToken
             {
-                Token = token,
-                Expiration = _accessTokenExpiration,
+                Expiration = _accessExpiration,
+                Token = token
             };
-
-
-
-
         }
-        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, SigningCredentials signingCredentials, User user, List<OperationClaim> operationClaims
-
-        )
+        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user, List<OperationClaim> operationClaims, SigningCredentials signingCredentials)
         {
             var jwt = new JwtSecurityToken(
 
                 issuer: tokenOptions.Issuer,
                 audience: tokenOptions.Audience,
-                expires: _accessTokenExpiration,
+                expires: _accessExpiration,
                 notBefore: DateTime.Now,
                 claims: SetClaims(user, operationClaims),
                 signingCredentials: signingCredentials
 
-                );
+            ); 
+
             return jwt;
 
         }
-        
-        private IEnumerable<Claim> SetClaims(User user,List<OperationClaim> operationClaims)
+
+        public IEnumerable<Claim> SetClaims(User user, List<OperationClaim> operationClaims)
         {
             var claims = new List<Claim>();
             return claims;
         }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using Business.Abstract;
+using Business.BusinessAspect.Autofac;
 using Business.Constant;
 using Business.ValidationRules.AddValidation;
 using Business.ValidationRules.UpdateValidation;
@@ -19,9 +20,11 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        public CarManager(ICarDal carDal)
+        IUserService _userService;
+        public CarManager(ICarDal carDal,IUserService userService)
         {
             _carDal = carDal;
+            _userService = userService;
         }
 
         public IDataResult<List<Car>> GetAll()
@@ -43,6 +46,7 @@ namespace Business.Concrete
             return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
 
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {

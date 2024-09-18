@@ -1,4 +1,4 @@
-﻿using CoreLayer.Entities;
+﻿using CoreLayer.Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 
 namespace Entities.Concrete

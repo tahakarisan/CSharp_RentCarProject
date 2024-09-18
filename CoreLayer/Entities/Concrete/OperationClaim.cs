@@ -1,6 +1,4 @@
-﻿using CoreLayer.Entities;
-
-namespace DataAccess.Concrete.Context
+﻿namespace CoreLayer.Entities.Concrete
 {
     public class OperationClaim : BaseEntity
     {

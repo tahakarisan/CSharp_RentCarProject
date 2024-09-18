@@ -1,5 +1,4 @@
-﻿
-using CoreLayer.Entities;
+﻿using CoreLayer.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ namespace CoreLayer.DataAccess
     public class EFEntityRepositoryBase<TEntity, TContext>
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
-
     {
         public bool Add(TEntity entity)
         {
@@ -22,7 +20,6 @@ namespace CoreLayer.DataAccess
                 return context.SaveChanges() > 0;
             }
         }
-
         public bool Delete(int id)
         {
             using (TContext context = new TContext())
@@ -33,7 +30,6 @@ namespace CoreLayer.DataAccess
                 return context.SaveChanges() > 0;
             }
         }
-
         public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
             using (TContext context = new TContext())
@@ -58,5 +54,13 @@ namespace CoreLayer.DataAccess
                 return context.SaveChanges() > 0;
             }
         }
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> filter)
+        {
+            using (TContext context = new TContext())
+            {
+                return context.Set<TEntity>().FirstOrDefault(filter);
+            }
+        }
+
     }
 }

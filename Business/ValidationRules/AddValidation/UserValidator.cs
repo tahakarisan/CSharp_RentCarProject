@@ -1,4 +1,4 @@
-﻿using Entities.Concrete;
+﻿using CoreLayer.Entities.Concrete;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace Business.ValidationRules.AddValidation
         {
             RuleFor(u => u.Email).NotEmpty();
             RuleFor(u => u.FirstName).MinimumLength(2);
-            RuleFor(u => u.Password).MinimumLength(2);
             RuleFor(u => u.LastName).MinimumLength(2);
 
         }
