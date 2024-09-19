@@ -26,14 +26,14 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
             {
-                return new DataErrorResult<List<Color>>(_colorDal.GetAll(), Messages.ListInMaintenance);
+                return new ErrorDataResult<List<Color>>(_colorDal.GetAll(), Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
+            return new SuccesfulDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
 
         public IDataResult<List<Color>> GetById(int id)
         {
-            return new DataSuccesfullResult<List<Color>>(_colorDal.GetAll(c => c.Id == id), Messages.ColorGetById);
+            return new SuccesfulDataResult<List<Color>>(_colorDal.GetAll(c => c.Id == id), Messages.ColorGetById);
         }
         [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color color)

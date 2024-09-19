@@ -13,7 +13,7 @@ namespace Business.Helpers.FileHelper
             if (file == null)
             {
                 var defaultImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", "Karışan Rent A Car.jpg");
-                return new DataErrorResult<string>(defaultImage);
+                return new ErrorDataResult<string>(defaultImage);
             }
             var extent = Path.GetExtension(file.FileName);
             var randomName = $"{Guid.NewGuid()}{extent}";
@@ -24,11 +24,11 @@ namespace Business.Helpers.FileHelper
                 {
                     file.CopyTo(stream);
                 }
-                return new DataSuccesfullResult<string>(data: path, message: "Eklendi");
+                return new SuccesfulDataResult<string>(data: path, message: "Eklendi");
             }
             catch (Exception)
             {
-                return new DataErrorResult<string>(data:null);
+                return new ErrorDataResult<string>(data:null);
             }
         }
     }

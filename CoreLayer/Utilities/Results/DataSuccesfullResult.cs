@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace CoreLayer.Utilities.Results
 {
-    public class DataSuccesfullResult<T> : DataResult<T>
+    public class SuccesfulDataResult<T> : DataResult<T>
     {
-        public DataSuccesfullResult(T data, string message) : base(data, true, message)
+        public SuccesfulDataResult(T data, string message) : base(data, true, message)
         {
 
         }
-        public DataSuccesfullResult(T data) : base(data, true)
+        public SuccesfulDataResult(T data) : base(data, true)
         {
 
         }
-        public DataSuccesfullResult(string message) : base(default, true,message)
+        public SuccesfulDataResult(string message) : base(default, true,message)
         {
 
         }

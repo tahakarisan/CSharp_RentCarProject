@@ -10,10 +10,7 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace Business.Concrete
 {
@@ -21,7 +18,7 @@ namespace Business.Concrete
     {
         ICarDal _carDal;
         IUserService _userService;
-        public CarManager(ICarDal carDal,IUserService userService)
+        public CarManager(ICarDal carDal, IUserService userService)
         {
             _carDal = carDal;
             _userService = userService;
@@ -31,31 +28,31 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
             {
-                return new DataErrorResult<List<Car>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<Car>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
+            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id), Messages.BrandGetById);
+            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id), Messages.BrandGetById);
         }
 
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            _carDal.Add(car);
-            return new SuccesfullResult(Messages.CarAdded);
+            return _carDal.Add(car) ? new SuccesfullResult(Messages.CarAdded) : new ErrorResult();
         }
         public IResult Delete(int id)
         {
-            if (!_carDal.GetAll(c => c.Id == id).Any())
+            var result = _carDal.FirstOrDefault(c => c.Id == id);
+            if (result == null)
             {
                 return new ErrorResult("Araba silinemedi");
             }
@@ -64,14 +61,19 @@ namespace Business.Concrete
         }
         public IDataResult<List<Car>> GetCarById(int id)
         {
-            return new DataSuccesfullResult<List<Car>>(_carDal.GetAll(c => c.Id == id), Messages.CarGetById);
+            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id), Messages.CarGetById);
         }
 
         [ValidationAspect(typeof(UpdateCarValidator))]
         public IResult Update(Car car)
         {
-            _carDal.Update(car);
-            return new SuccesfullResult("Araba Güncellendi");
+            var result = _carDal.FirstOrDefault(c => c.Id == car.Id);
+            if (result != null)
+            {
+                _carDal.Update(car);
+                return new SuccesfullResult("Araba Güncellendi");
+            }
+            return new ErrorResult("Güncellemek istediğiniz araba bulunamadı");
         }
         private IResult IsDescriptionInValid(Car car)
         {
@@ -85,15 +87,15 @@ namespace Business.Concrete
         public IDataResult<Car> GetById(int carId)
         {
             // ID'ye göre aracı getir
-            var car = _carDal.Get(c => c.Id == carId);
+            var car = _carDal.FirstOrDefault(c => c.Id == carId);
 
             if (car == null)
             {
-                return new DataErrorResult<Car>("Araba bulunamadı.");  // Eğer araç bulunamazsa hata döndür
+                return new ErrorDataResult<Car>("Araba bulunamadı.");  // Eğer araç bulunamazsa hata döndür
             }
-            _carDal.Get(c => c.Id == carId);
+            _carDal.FirstOrDefault(c => c.Id == carId);
 
-            return new DataSuccesfullResult<Car>(car, "Araba başarıyla bulundu.");  // Başarılı bir şekilde araç bulundu
+            return new SuccesfulDataResult<Car>(car);  // Başarılı bir şekilde araç bulundu
         }
 
 

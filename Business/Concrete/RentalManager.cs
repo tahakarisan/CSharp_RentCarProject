@@ -25,7 +25,8 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            if (!_rentalDal.GetAll(r => r.Id == id).Any())
+            var result = _rentalDal.FirstOrDefault(r=>r.Id==id);
+            if (result!=null)
             {
                 return new ErrorResult("Zaten böyle bir veri mevcut değil");
             }
@@ -37,10 +38,10 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 4)
             {
-                return new DataErrorResult<List<RentalInfo>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<RentalInfo>>(Messages.ListInMaintenance);
             }
 
-            return new DataSuccesfullResult<List<RentalInfo>>(_rentalDal.GetAll(), "Kiralamalar listelendi");
+            return new SuccesfulDataResult<List<RentalInfo>>(_rentalDal.GetAll(), "Kiralamalar listelendi");
         }
 
         [ValidationAspect(typeof(RentalValidator))]
@@ -69,6 +70,11 @@ namespace Business.Concrete
         [ValidationAspect(typeof(UpdateRentalValidator))]
         public IResult Update(RentalInfo rentalInfo)
         {
+            var result = _rentalDal.FirstOrDefault(r=>r.Id==rentalInfo.Id);
+            if (result==null)
+            {
+                return new ErrorResult("Güncellenemedi");
+            }
             _rentalDal.Update(rentalInfo);
             return new SuccesfullResult("Veri güncellendi");
         }

@@ -51,9 +51,9 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
             {
-                return new DataErrorResult<List<Customer>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<Customer>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Customer>>(_customerDal.GetAll(), Messages.CarListed);
+            return new SuccesfulDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CarListed);
         }
 
     }

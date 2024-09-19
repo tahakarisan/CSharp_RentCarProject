@@ -53,9 +53,9 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 4)
             {
-                return new DataErrorResult<List<User>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<User>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<User>>(_userDal.GetAll(), Messages.UserListed);
+            return new SuccesfulDataResult<List<User>>(_userDal.GetAll(), Messages.UserListed);
         }
 
         public User GetByMail(string email)
@@ -69,13 +69,13 @@ namespace Business.Concrete
             var claims = _userDal.GetClaims(user);
             if (claims != null && claims.Any())
             {
-                return new DataErrorResult<List<OperationClaim>>("");
+                return new ErrorDataResult<List<OperationClaim>>("");
             }
-            return new DataSuccesfullResult<List<OperationClaim>>(claims);
+            return new SuccesfulDataResult<List<OperationClaim>>(claims);
         }
         public IDataResult<List<User>> GetUserById(int id)
         {
-            return new DataSuccesfullResult<List<User>>(_userDal.GetAll(u => u.Id == id), Messages.UserGetById);
+            return new SuccesfulDataResult<List<User>>(_userDal.GetAll(u => u.Id == id), Messages.UserGetById);
         }
 
         [ValidationAspect(typeof(UpdateUserValidator))]

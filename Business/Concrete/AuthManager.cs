@@ -27,9 +27,9 @@ namespace Business.Concrete
             var result = _userService.GetClaims(user);
             if (result.Success)
             {
-                return new DataSuccesfullResult<AccessToken>(_tokenHelper.CreateToken(user, result.Data));
+                return new SuccesfulDataResult<AccessToken>(_tokenHelper.CreateToken(user, result.Data));
             }
-            return new DataErrorResult<AccessToken>("Token oluşturulamadı");
+            return new ErrorDataResult<AccessToken>("Token oluşturulamadı");
         }
         public IResult Login(UserForLoginDto userForLoginDto)
         {
@@ -58,7 +58,7 @@ namespace Business.Concrete
                 FirstName = userForRegisterDto.FirstName
             };
             _userService.Add(user);
-            return new DataSuccesfullResult<User>(_userService.GetByMail(userForRegisterDto.Email));
+            return new SuccesfulDataResult<User>(_userService.GetByMail(userForRegisterDto.Email));
 
         }
 

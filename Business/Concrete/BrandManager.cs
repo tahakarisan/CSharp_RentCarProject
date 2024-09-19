@@ -45,18 +45,18 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 6)
             {
-                return new DataErrorResult<List<Brand>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<Brand>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(),"Markalar listelendi");
+            return new SuccesfulDataResult<List<Brand>>(_brandDal.GetAll(),"Markalar listelendi");
         }
 
         public IDataResult<List<Brand>> GetById(int id)
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 6)
             {
-                return new DataErrorResult<List<Brand>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<Brand>>(Messages.ListInMaintenance);
             }
-            return new DataSuccesfullResult<List<Brand>>(_brandDal.GetAll(b=>b.Id==id));
+            return new SuccesfulDataResult<List<Brand>>(_brandDal.GetAll(b=>b.Id==id));
         }
 
         [ValidationAspect(typeof(UpdateBrandValidator))]

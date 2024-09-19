@@ -24,9 +24,9 @@ namespace Business.Concrete
             var result = _carImageDal.GetAll();
             if (result.Count > 0)
             {
-                return new DataSuccesfullResult<List<CarImage>>(_carImageDal.GetAll(), "Resimler listelendi");
+                return new SuccesfulDataResult<List<CarImage>>(_carImageDal.GetAll(), "Resimler listelendi");
             }
-            return new DataErrorResult<List<CarImage>>("Resimler listelenemedi");
+            return new ErrorDataResult<List<CarImage>>("Resimler listelenemedi");
 
         }
         public IResult DeleteImage(int id)
