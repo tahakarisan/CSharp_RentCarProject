@@ -22,6 +22,7 @@ namespace Business.Concrete
         {
             _colorDal = colorDal;
         }
+        [CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
@@ -30,7 +31,7 @@ namespace Business.Concrete
             }
             return new SuccesfulDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
-
+        [CacheAspect]
         public IDataResult<List<Color>> GetById(int id)
         {
             return new SuccesfulDataResult<List<Color>>(_colorDal.GetAll(c => c.Id == id), Messages.ColorGetById);

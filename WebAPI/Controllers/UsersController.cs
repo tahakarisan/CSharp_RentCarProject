@@ -11,11 +11,10 @@ namespace WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         IUserService _userService;
-        IAuthService _authService;
-        public UsersController(IUserService userService,IAuthService authService)
+        
+        public UsersController(IUserService userService)
         {
             _userService = userService;
-            _authService = authService;
         }
         [HttpGet("GetAllUser")]
         public IActionResult Get()
@@ -27,31 +26,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
-        [HttpPost("Login")]
-        public IActionResult Login(UserForLoginDto userForLoginDto)
-        {
-            var result = _authService.Login(userForLoginDto);
-            if (result.Success)
-            {
-                return Ok(result.Message);
-            }
-            return BadRequest(result.Message);
-        }
-
-
-        [HttpPost("Register")]
-        public IActionResult Register(UserForRegisterDto userForRegisterDto)
-        {
-            var result = _authService.Register(userForRegisterDto);
-            var createToken = _authService.CreateToken(result.Data);
-            if (result.Success && createToken.Success)
-            {
-                return Ok(createToken.Data);
-            }
      
-            return BadRequest(result.Message);
-
-        }
         [HttpPost("AddUser")]
         public IActionResult Add(User user)
         {

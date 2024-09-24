@@ -24,6 +24,7 @@ namespace Business.Concrete
             _userService = userService;
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
@@ -33,11 +34,13 @@ namespace Business.Concrete
             return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
             return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id), Messages.BrandGetById);
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
             return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
@@ -45,6 +48,7 @@ namespace Business.Concrete
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [PerformanceAspect(5)]
         public IResult Add(Car car)
         {
             return _carDal.Add(car) ? new SuccesfullResult(Messages.CarAdded) : new ErrorResult();
@@ -59,6 +63,7 @@ namespace Business.Concrete
             _carDal.Delete(id);
             return new SuccesfullResult("Araba Silindi");
         }
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarById(int id)
         {
             return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id), Messages.CarGetById);

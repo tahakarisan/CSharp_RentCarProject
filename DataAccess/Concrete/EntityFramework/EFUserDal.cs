@@ -13,7 +13,7 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFUserDal : EFEntityRepositoryBase<User, RentCarContext>, IUserDal
     {
-        
+
         public List<OperationClaim> GetClaims(User user)
         {
             using (RentCarContext context = new RentCarContext())
@@ -27,9 +27,9 @@ namespace DataAccess.Concrete.EntityFramework
                                 Id = operationClaims.Id,
                                 Name = operationClaims.Name,
                             };
-                var a= query.ToList();
-                return a;
+                return query.ToList();
+
             }
-        } 
+        }
     }
 }

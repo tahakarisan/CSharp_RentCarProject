@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Business.BusinessAspect.Autofac
 {
-   
     public class SecuredOperation : MethodInterception
     {
         public string[] _roles;
@@ -28,7 +27,7 @@ namespace Business.BusinessAspect.Autofac
             var roleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
             foreach (var role in _roles)
             {
-                if (role.Contains(role))
+                if (roleClaims.Contains(role))
                 {
                     return;
                 }

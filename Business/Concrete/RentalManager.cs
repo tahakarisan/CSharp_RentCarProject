@@ -22,7 +22,7 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
             _carService = carService;
         }
-
+        [TransactionScopeAspect]
         public IResult Delete(int id)
         {
             var result = _rentalDal.FirstOrDefault(r=>r.Id==id);
@@ -33,7 +33,7 @@ namespace Business.Concrete
             _rentalDal.Delete(id);
             return new SuccesfullResult("Araba kiralama verisi silindi");
         }
-
+        [CacheAspect]
         public IDataResult<List<RentalInfo>> GetAll()
         {
             if (DateTime.Now.Hour == 4)
@@ -45,6 +45,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(RentalValidator))]
+        [TransactionScopeAspect]
         public IResult Add(RentalInfo rentalInfo)
         {
             IResult result = BusinessRules.Run(IsTheCarOverloaded(rentalInfo),IsItForRent(rentalInfo),DailyRentalLimit(rentalInfo));
@@ -68,6 +69,7 @@ namespace Business.Concrete
 
         }
         [ValidationAspect(typeof(UpdateRentalValidator))]
+        [TransactionScopeAspect]
         public IResult Update(RentalInfo rentalInfo)
         {
             var result = _rentalDal.FirstOrDefault(r=>r.Id==rentalInfo.Id);

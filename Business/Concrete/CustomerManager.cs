@@ -46,7 +46,7 @@ namespace Business.Concrete
             _customerDal.Update(customer);
             return new SuccesfullResult("Müşteri başarıyla güncellendi");
         }
-
+        [CacheAspect]
         public IDataResult<List<Customer>> GetAll()
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)

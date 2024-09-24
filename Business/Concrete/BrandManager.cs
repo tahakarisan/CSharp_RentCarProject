@@ -40,7 +40,7 @@ namespace Business.Concrete
             _brandDal.Delete(id);
             return new SuccesfullResult("Marka başarıyla silindi");
         }
-
+        [CacheAspect]
         public IDataResult<List<Brand>> GetAll()
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 6)
@@ -49,7 +49,7 @@ namespace Business.Concrete
             }
             return new SuccesfulDataResult<List<Brand>>(_brandDal.GetAll(),"Markalar listelendi");
         }
-
+        [CacheAspect]
         public IDataResult<List<Brand>> GetById(int id)
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 6)

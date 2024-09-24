@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Helpers.FileHelper;
+using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Business;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
@@ -18,7 +19,7 @@ namespace Business.Concrete
         {
             _carImageDal = carImageDal;
         }
-
+        [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
             var result = _carImageDal.GetAll();

@@ -69,9 +69,9 @@ namespace Business.Concrete
             var claims = _userDal.GetClaims(user);
             if (claims != null && claims.Any())
             {
-                return new ErrorDataResult<List<OperationClaim>>("");
+                return new SuccesfulDataResult<List<OperationClaim>>(claims);
             }
-            return new SuccesfulDataResult<List<OperationClaim>>(claims);
+            return new ErrorDataResult<List<OperationClaim>>("");
         }
         public IDataResult<List<User>> GetUserById(int id)
         {

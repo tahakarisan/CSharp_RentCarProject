@@ -16,10 +16,7 @@ namespace CoreLayer.Extensions
         }
         public static List<string> ClaimRoles(this ClaimsPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal==null)
-            {
-                
-            }
+          
             return claimsPrincipal.Claims(ClaimTypes.Role);
         }
     }
