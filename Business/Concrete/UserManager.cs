@@ -7,6 +7,7 @@ using CoreLayer.Entities.Concrete;
 using CoreLayer.Utilities.Business;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,9 +23,13 @@ namespace Business.Concrete
     {
 
         IUserDal _userDal;
-        public UserManager(IUserDal userDal)
+        ICampaignService _campaignService;
+        ICampaignDal _campaignDal;
+        public UserManager(IUserDal userDal,ICampaignService campaignService,ICampaignDal campaignDal)
         {
             _userDal = userDal;
+            _campaignService = campaignService;
+            _campaignDal = campaignDal;
         }
 
         [ValidationAspect(typeof(UserValidator))]
@@ -42,6 +47,22 @@ namespace Business.Concrete
                 return new SuccesfullResult("Kullanıcı eklendi");
             }
             return new ErrorResult(result.Message);
+        }
+
+        public IResult CampaignDefine(UserCampaign userCampaign)
+        {
+            var query = _userDal.FirstOrDefault(u=>u.Id==userCampaign.UserId);
+            if (query==null)
+            {
+                return new ErrorResult("Kullanıcı Bulunamadı");
+            }
+            var result = _campaignService.GetUsersCampaigns(query);
+            if (result != null)
+            {
+                return new ErrorResult("Bu kullanıcıya ait kampanya zaten var");
+            }
+            var campaignDefine = _campaignDal.AddUserCampaign(userCampaign);
+            return new SuccesfullResult("Kampanya kullanıcıya tanımlandı");
         }
 
         public IResult Delete(int id)
@@ -84,6 +105,7 @@ namespace Business.Concrete
             _userDal.Update(user);
             return new SuccesfullResult(Messages.UserUpdated);
         }
+        
         private IResult IsExistEmail(User user)
         {
             var result = _userDal.GetAll(u => u.Email == user.Email).Any();
@@ -93,6 +115,7 @@ namespace Business.Concrete
             }
             return new SuccesfullResult();
         }
+
         //private IResult InvalidPassword(User user)
         //{
         //    var result = user.Password.Contains(user.FirstName.ToLower());

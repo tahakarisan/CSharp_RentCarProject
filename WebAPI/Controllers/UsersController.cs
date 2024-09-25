@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using CoreLayer.Entities.Concrete;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
@@ -57,6 +58,17 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+        [HttpPost("AddCampaign")]
+        public IActionResult AddCampaign(UserCampaign userCampaign)
+        {
+            var result = _userService.CampaignDefine(userCampaign);
+            if (result.Success)
+            {
+                return Ok(result.Message);
+            }
+            return BadRequest(result.Message);
+        }
+
 
     }
 }

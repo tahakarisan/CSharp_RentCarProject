@@ -1,15 +1,11 @@
-﻿using Business.Constant;
-using Castle.DynamicProxy;
+﻿using Castle.DynamicProxy;
 using CoreLayer.Extensions;
 using CoreLayer.Utilities.Interceptors;
 using CoreLayer.Utilities.IoC;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlTypes;
 
 namespace Business.BusinessAspect.Autofac
 {
@@ -26,7 +22,7 @@ namespace Business.BusinessAspect.Autofac
         {
             var roleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
             foreach (var role in _roles)
-            {
+            { 
                 if (roleClaims.Contains(role))
                 {
                     return;
@@ -34,6 +30,7 @@ namespace Business.BusinessAspect.Autofac
 
                 throw new Exception("Yetki yok");
             }
+            
         }
     }
 }

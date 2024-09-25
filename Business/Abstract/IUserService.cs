@@ -1,6 +1,7 @@
 ﻿using CoreLayer.Entities.Concrete;
 using CoreLayer.Utilities.Results;
 using CoreLayer.Utilities.Security.JWT;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace Business.Abstract
     {
         IResult Add(User user);
         User GetByMail(string email);
+        IResult CampaignDefine(UserCampaign userCampaign);
         IDataResult<List<User>> GetAll();
         IResult Delete(int id);
         IResult Update(User user);
-        IDataResult<List<OperationClaim>> GetClaims(User user);
     }
 }

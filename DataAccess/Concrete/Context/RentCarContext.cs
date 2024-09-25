@@ -19,5 +19,7 @@ namespace DataAccess.Concrete.Context
         public DbSet<CarImage> CarImages { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<UserCampaign> UserCampaigns { get; set; }
     }
 }
