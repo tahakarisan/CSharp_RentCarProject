@@ -22,7 +22,18 @@ namespace Business.Concrete
             _userService = userService;
 
         }
-    
+
+        public IResult Add(Campaign campaign)
+        {
+            var result = _campaignDal.FirstOrDefault(c=>c.Id==campaign.Id);
+            if (result == null)
+            {
+                _campaignDal.Add(campaign);
+                return new SuccesfullResult("Kampanya eklendi");
+            }
+            return new ErrorResult("Kampanya eklenemedi");
+        }
+
         public IResult Delete(Campaign campaign)
         {
             var query = _campaignDal.FirstOrDefault(c=>c.Id==campaign.Id);

@@ -2,6 +2,8 @@
 using CoreLayer.Entities.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.Context;
+using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,17 @@ namespace DataAccess.Concrete.EntityFramework
                             };
                 return query.ToList();
 
+            }
+        }
+        public bool DefineCampaign(UserCampaign userCampaign)
+        {
+            using (var context = new RentCarContext())
+            {
+                var define = context.Entry(userCampaign);
+                define.State = EntityState.Added;
+              
+                return  context.SaveChanges()>0;
+           
             }
         }
     }

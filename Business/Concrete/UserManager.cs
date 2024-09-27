@@ -10,26 +10,17 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-
         IUserDal _userDal;
-        ICampaignService _campaignService;
-        ICampaignDal _campaignDal;
-        public UserManager(IUserDal userDal,ICampaignService campaignService,ICampaignDal campaignDal)
+        public UserManager(IUserDal userDal)
         {
             _userDal = userDal;
-            _campaignService = campaignService;
-            _campaignDal = campaignDal;
+
         }
 
         [ValidationAspect(typeof(UserValidator))]
@@ -51,17 +42,12 @@ namespace Business.Concrete
 
         public IResult CampaignDefine(UserCampaign userCampaign)
         {
-            var query = _userDal.FirstOrDefault(u=>u.Id==userCampaign.UserId);
-            if (query==null)
+            var query = _userDal.FirstOrDefault(u => u.Id == userCampaign.UserId);
+            if (query == null)
             {
                 return new ErrorResult("Kullanıcı Bulunamadı");
             }
-            var result = _campaignService.GetUsersCampaigns(query);
-            if (result != null)
-            {
-                return new ErrorResult("Bu kullanıcıya ait kampanya zaten var");
-            }
-            var campaignDefine = _campaignDal.AddUserCampaign(userCampaign);
+            var campaignDefine = _userDal.DefineCampaign(userCampaign);
             return new SuccesfullResult("Kampanya kullanıcıya tanımlandı");
         }
 
@@ -105,7 +91,7 @@ namespace Business.Concrete
             _userDal.Update(user);
             return new SuccesfullResult(Messages.UserUpdated);
         }
-        
+
         private IResult IsExistEmail(User user)
         {
             var result = _userDal.GetAll(u => u.Email == user.Email).Any();

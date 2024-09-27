@@ -1,4 +1,5 @@
 ﻿using CoreLayer.Entities.Concrete;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace DataAccess.Abstract
     public interface IUserDal : IEntityRepository<User>
     {
         List<OperationClaim> GetClaims(User user);
+        bool DefineCampaign(UserCampaign userCampaign);
     }
 }

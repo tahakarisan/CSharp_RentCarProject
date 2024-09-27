@@ -11,6 +11,7 @@ namespace Business.Abstract
 {
     public interface ICampaignService
     {
+        IResult Add(Campaign campaign);
         IResult Delete(Campaign campaign);
         IResult Update(Campaign campaign);
         IDataResult<List<Campaign>> GetUsersCampaigns(User user);
