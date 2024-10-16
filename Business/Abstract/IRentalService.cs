@@ -1,5 +1,6 @@
 ﻿using CoreLayer.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Business.Abstract
         IResult Add(RentalInfo rentalInfo);
         IResult Delete(int id);
         IResult Update(RentalInfo rentalInfo);
-        IDataResult<List<RentalInfo>> GetAll();
+        IDataResult<List<RentalDto>> GetAll();
 
     }
 }

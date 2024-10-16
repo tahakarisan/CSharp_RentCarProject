@@ -62,7 +62,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<User>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<User>>(_userDal.GetAll(), Messages.UserListed);
+            return new SuccesfulDataResult<List<User>>(data: _userDal.GetAll(), Messages.UserListed);
         }
 
         public User GetByMail(string email)
@@ -76,13 +76,13 @@ namespace Business.Concrete
             var claims = _userDal.GetClaims(user);
             if (claims != null && claims.Any())
             {
-                return new SuccesfulDataResult<List<OperationClaim>>(claims);
+                return new SuccesfulDataResult<List<OperationClaim>>(data: claims);
             }
             return new ErrorDataResult<List<OperationClaim>>("");
         }
         public IDataResult<List<User>> GetUserById(int id)
         {
-            return new SuccesfulDataResult<List<User>>(_userDal.GetAll(u => u.Id == id), Messages.UserGetById);
+            return new SuccesfulDataResult<List<User>>(data: _userDal.GetAll(u => u.Id == id), Messages.UserGetById);
         }
 
         [ValidationAspect(typeof(UpdateUserValidator))]

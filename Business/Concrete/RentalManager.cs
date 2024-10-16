@@ -7,6 +7,7 @@ using CoreLayer.Utilities.Business;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,14 +35,14 @@ namespace Business.Concrete
             return new SuccesfullResult("Araba kiralama verisi silindi");
         }
         [CacheAspect]
-        public IDataResult<List<RentalInfo>> GetAll()
+        public IDataResult<List<RentalDto>> GetAll()
         {
             if (DateTime.Now.Hour == 4)
             {
-                return new ErrorDataResult<List<RentalInfo>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<RentalDto>>(Messages.ListInMaintenance);
             }
 
-            return new SuccesfulDataResult<List<RentalInfo>>(_rentalDal.GetAll(), "Kiralamalar listelendi");
+            return new SuccesfulDataResult<List<RentalDto>>(data: _rentalDal.GetRentalInfoDto(), "Kiralamalar listelendi");
         }
 
         [ValidationAspect(typeof(RentalValidator))]

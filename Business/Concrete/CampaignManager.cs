@@ -47,7 +47,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Campaign>> GetCampaigns(Campaign campaign)
         {
-            return new SuccesfulDataResult<List<Campaign>>(_campaignDal.GetAll());
+            return new SuccesfulDataResult<List<Campaign>>(data:_campaignDal.GetAll());
         }
 
         public IDataResult<List<Campaign>> GetUsersCampaigns(User user)
@@ -62,7 +62,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Campaign>>("Kullanıcıya ait Kampanya bulunamadı");
             }
-            return new SuccesfulDataResult<List<Campaign>>(result);
+            return new SuccesfulDataResult<List<Campaign>>(data: result);
         }
 
         public IResult Update(Campaign campaign)

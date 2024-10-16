@@ -33,7 +33,6 @@ namespace CoreLayer.CrossCuttingConcerns.Caching
         {
             var result = _memoryCache.Get(key);
             return result;
-
         }
 
         public bool IsAdded(string key)

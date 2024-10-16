@@ -53,7 +53,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Customer>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CarListed);
+            return new SuccesfulDataResult<List<Customer>>(data: _customerDal.GetAll(), Messages.CarListed);
         }
 
     }

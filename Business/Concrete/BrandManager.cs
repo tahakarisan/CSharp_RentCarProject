@@ -47,7 +47,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Brand>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<Brand>>(_brandDal.GetAll(),"Markalar listelendi");
+            return new SuccesfulDataResult<List<Brand>>(data:_brandDal.GetAll(),"Markalar listelendi");
         }
         [CacheAspect]
         public IDataResult<List<Brand>> GetById(int id)
@@ -56,7 +56,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Brand>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<Brand>>(_brandDal.GetAll(b=>b.Id==id));
+            return new SuccesfulDataResult<List<Brand>>(data: _brandDal.GetAll(b=>b.Id==id));
         }
 
         [ValidationAspect(typeof(UpdateBrandValidator))]

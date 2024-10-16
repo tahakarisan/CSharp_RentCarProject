@@ -19,25 +19,27 @@ namespace DataAccess.Concrete.EntityFramework
                 return context.Set<Car>().FirstOrDefault(filter);
             }
         }
-  
-        public void GetCarDto()
+        public List<CarDto> GetCarDto()
         {
             using (RentCarContext context = new RentCarContext())
             {
+
                 var result = from c in context.Cars
                              join b in context.Brands
                              on c.BrandId equals b.Id
+                             join co in context.Colors
+                             on c.ColorId equals co.Id
                              select new CarDto
                              {
-                                 DailyPrice = c.DailyPrice,
-                                 Id = c.Id,
-                                 Description = c.Description,
-                                 BrandId = Convert.ToString(b.Id)
+                                 Id= c.Id,
+                                 BrandName= b.BrandName,
+                                 Description=c.Description,
+                                 DailyPrice= c.DailyPrice,
+                                 ModelYear = c.ModelYear,
+                                 ColorName = co.ColorName
                              };
-                result.ToList();
+                return result.ToList();
             }
-
-
         }
     }
 

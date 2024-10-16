@@ -8,6 +8,7 @@ using CoreLayer.Aspects.Autofac;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,25 +26,25 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetAll()
+        public IDataResult<List<CarDto>> GetAll()
         {
             if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
             {
-                return new ErrorDataResult<List<Car>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<CarDto>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
+            return new SuccesfulDataResult<List<CarDto>>(data:_carDal.GetCarDto(), Messages.CarListed);
         }
 
         [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id), Messages.BrandGetById);
+            return new SuccesfulDataResult<List<Car>>(data: _carDal.GetAll(c => c.BrandId == id), Messages.BrandGetById);
         }
 
         [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+            return new SuccesfulDataResult<List<Car>>(data: _carDal.GetAll(c => c.ColorId == id));
         }
 
         [SecuredOperation("admin")]
@@ -66,7 +67,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Car>> GetCarById(int id)
         {
-            return new SuccesfulDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id), Messages.CarGetById);
+            return new SuccesfulDataResult<List<Car>>(data: _carDal.GetAll(c => c.Id == id), Messages.CarGetById);
         }
 
         [ValidationAspect(typeof(UpdateCarValidator))]
@@ -100,7 +101,7 @@ namespace Business.Concrete
             }
             _carDal.FirstOrDefault(c => c.Id == carId);
 
-            return new SuccesfulDataResult<Car>(car);  // Başarılı bir şekilde araç bulundu
+            return new SuccesfulDataResult<Car>(data: car);  // Başarılı bir şekilde araç bulundu
         }
 
 

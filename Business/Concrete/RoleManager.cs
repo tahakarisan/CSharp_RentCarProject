@@ -55,7 +55,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<UserOperationClaim>>("Girdiğiniz kullanıcın herhangi bir rolü bulunmuyor");
             }
-            return new SuccesfulDataResult<List<UserOperationClaim>>(result);
+            return new SuccesfulDataResult<List<UserOperationClaim>>(data: result);
             
         }
     }

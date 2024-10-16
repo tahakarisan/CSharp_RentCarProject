@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
 using Castle.DynamicProxy;
+using CoreLayer.CrossCuttingConcerns.Caching;
 using CoreLayer.Utilities.Interceptors;
 using CoreLayer.Utilities.Security.JWT;
 using DataAccess.Abstract;
@@ -35,7 +36,6 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EFRoleDal>().As<IRoleDal>().SingleInstance();
             builder.RegisterType<EFCampaignDal>().As<ICampaignDal>().SingleInstance();
             builder.RegisterType<CampaignManager>().As<ICampaignService>().SingleInstance();
-            
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

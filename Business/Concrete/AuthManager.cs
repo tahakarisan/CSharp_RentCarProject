@@ -28,7 +28,7 @@ namespace Business.Concrete
             var createToken = _tokenHelper.CreateToken(user, result.Data);
             if (createToken!=null)
             {
-                return new SuccesfulDataResult<AccessToken>(_tokenHelper.CreateToken(user,result.Data));
+                return new SuccesfulDataResult<AccessToken>(data:_tokenHelper.CreateToken(user,result.Data));
             }
             return new ErrorDataResult<AccessToken>("Token oluşturulamadı");
         }
@@ -40,7 +40,7 @@ namespace Business.Concrete
             {
                 if (HashingHelper.VerifyPassword(userForLoginDto.Password, result.PasswordSalt, result.PasswordHash))
                 {
-                    return new SuccesfulDataResult<User>(result, "Giriş Başarılı");
+                    return new SuccesfulDataResult<User>(data:result, "Giriş Başarılı");
                 }
             }
             return new ErrorDataResult<User>("Giriş Yapılamadı");
@@ -59,7 +59,7 @@ namespace Business.Concrete
                 FirstName = userForRegisterDto.FirstName
             };
             _userService.Add(user);
-            return new SuccesfulDataResult<User>(_userService.GetByMail(userForRegisterDto.Email));
+            return new SuccesfulDataResult<User>(data:_userService.GetByMail(userForRegisterDto.Email));
 
         }
 

@@ -29,12 +29,12 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Color>>(_colorDal.GetAll(), Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
+            return new SuccesfulDataResult<List<Color>>(data: _colorDal.GetAll(), Messages.ColorListed);
         }
         [CacheAspect]
         public IDataResult<List<Color>> GetById(int id)
         {
-            return new SuccesfulDataResult<List<Color>>(_colorDal.GetAll(c => c.Id == id), Messages.ColorGetById);
+            return new SuccesfulDataResult<List<Color>>(data: _colorDal.GetAll(c => c.Id == id), Messages.ColorGetById);
         }
         [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color color)
