@@ -25,10 +25,20 @@ namespace Business.Concrete
             _userService = userService;
         }
 
-        [CacheAspect]
+        public IDataResult<List<CarDto>> GetDetail()
+        {
+            if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 5)
+            {
+                return new ErrorDataResult<List<CarDto>>(Messages.ListInMaintenance);
+            }
+            return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarDto(), Messages.CarListed);
+        }
+
+
+        //[CacheAspect]
         public IDataResult<List<CarDto>> GetAll()
         {
-            if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
+            if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 5)
             {
                 return new ErrorDataResult<List<CarDto>>(Messages.ListInMaintenance);
             }
@@ -36,20 +46,25 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByBrandId(int id)
+        public IDataResult<List<CarDto>> GetCarsByBrandId(int brandId)
         {
-            return new SuccesfulDataResult<List<Car>>(data: _carDal.GetAll(c => c.BrandId == id), Messages.BrandGetById);
+            var result = _carDal.GetCarByBrandDto(brandId);
+            if (result==null)
+            {
+                return new ErrorDataResult<List<CarDto>>(message:"Böyle bir araba yok");
+            }
+            return new SuccesfulDataResult<List<CarDto>>(data:result);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByColorId(int id)
+        public IDataResult<List<CarDto>> GetCarsByColorId(int id)
         {
-            return new SuccesfulDataResult<List<Car>>(data: _carDal.GetAll(c => c.ColorId == id));
+            return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarByColorId(id));
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [PerformanceAspect(5)]
+        //[PerformanceAspect(5)]
         public IResult Add(Car car)
         {
             return _carDal.Add(car) ? new SuccesfullResult(Messages.CarAdded) : new ErrorResult();
@@ -104,7 +119,10 @@ namespace Business.Concrete
             return new SuccesfulDataResult<Car>(data: car);  // Başarılı bir şekilde araç bulundu
         }
 
-
+        public IDataResult<List<CarDto>> GetDetailByCarId(int carId)
+        {
+            return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarDetailByCarId(carId));
+        }
     }
 
 }

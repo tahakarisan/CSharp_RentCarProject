@@ -19,13 +19,12 @@ namespace Business.Concrete
         {
             _carImageDal = carImageDal;
         }
-        [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
-            var result = _carImageDal.GetAll();
+            var result = _carImageDal.GetCarImage();
             if (result.Count > 0)
             {
-                return new SuccesfulDataResult<List<CarImage>>(data: _carImageDal.GetAll(), "Resimler listelendi");
+                return new SuccesfulDataResult<List<CarImage>>(data:_carImageDal.GetCarImage(), "Resimler listelendi");
             }
             return new ErrorDataResult<List<CarImage>>("Resimler listelenemedi");
 
@@ -108,6 +107,15 @@ namespace Business.Concrete
             return new SuccesfullResult();
         }
 
+        public IDataResult<List<CarImage>> GetImagesByCarId(int carId)
+        {
+            var result = _carImageDal.GetAll(c => c.CarId == carId);
+            if (result != null)
+            {
+                return new SuccesfulDataResult<List<CarImage>>(data:result);
+            }
+            return new ErrorDataResult<List<CarImage>>("Araba mevcut değil");
+        }
     }
 }
 

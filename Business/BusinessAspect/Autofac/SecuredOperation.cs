@@ -1,4 +1,5 @@
-﻿using Castle.DynamicProxy;
+﻿using Business.Constant;
+using Castle.DynamicProxy;
 using CoreLayer.Extensions;
 using CoreLayer.Utilities.Interceptors;
 using CoreLayer.Utilities.IoC;
@@ -11,26 +12,27 @@ namespace Business.BusinessAspect.Autofac
 {
     public class SecuredOperation : MethodInterception
     {
-        public string[] _roles;
+        private string[] _roles;
         private IHttpContextAccessor _httpContextAccessor;
+
         public SecuredOperation(string roles)
         {
-            _roles = roles.Split(",");
+            _roles = roles.Split(',');
             _httpContextAccessor = ServiceTool.ServiceProvider.GetService<IHttpContextAccessor>();
+
         }
+
         protected override void OnBefore(IInvocation invocation)
         {
             var roleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
             foreach (var role in _roles)
-            { 
+            {
                 if (roleClaims.Contains(role))
                 {
                     return;
                 }
-
-                throw new Exception("Yetki yok");
             }
-            
+            throw new Exception("Yetkin yok");
         }
     }
 }

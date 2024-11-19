@@ -71,14 +71,9 @@ namespace Business.Concrete
             return result;
         }
 
-        public IDataResult<List<OperationClaim>> GetClaims(User user)
+        public List<OperationClaim> GetClaims(User user)
         {
-            var claims = _userDal.GetClaims(user);
-            if (claims != null && claims.Any())
-            {
-                return new SuccesfulDataResult<List<OperationClaim>>(data: claims);
-            }
-            return new ErrorDataResult<List<OperationClaim>>("");
+           return _userDal.GetClaims(user); 
         }
         public IDataResult<List<User>> GetUserById(int id)
         {

@@ -18,7 +18,7 @@ namespace CoreLayer.Utilities.Security.JWT
 {
     public class JwtHelper : ITokenHelper
     {
-        IConfiguration Configuration;
+        public IConfiguration Configuration { get;}
         TokenOptions _tokenOptions;
         DateTime _accessExpiration;
         public JwtHelper(IConfiguration configuration)
@@ -63,7 +63,7 @@ namespace CoreLayer.Utilities.Security.JWT
             claims.AddName($"{user.FirstName} {user.LastName}");
             claims.AddEmail(user.Email);
             claims.AddNameIdentifier(user.Id.ToString());
-            claims.AddRoles(operationClaims?.Select(p => p.Name)?.ToArray() ?? null);
+            claims.AddRoles(operationClaims.Select(p => p.Name).ToArray());
             return claims;
         }
     }

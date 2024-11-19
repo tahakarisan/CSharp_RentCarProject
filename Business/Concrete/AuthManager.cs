@@ -25,12 +25,8 @@ namespace Business.Concrete
         public IDataResult<AccessToken> CreateToken(User user)
         {
             var result = _userService.GetClaims(user);
-            var createToken = _tokenHelper.CreateToken(user, result.Data);
-            if (createToken!=null)
-            {
-                return new SuccesfulDataResult<AccessToken>(data:_tokenHelper.CreateToken(user,result.Data));
-            }
-            return new ErrorDataResult<AccessToken>("Token oluşturulamadı");
+            var createToken = _tokenHelper.CreateToken(user, result);
+            return new SuccesfulDataResult<AccessToken>(data:_tokenHelper.CreateToken(user,result));
         }
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
@@ -48,7 +44,9 @@ namespace Business.Concrete
 
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto)
         {
-            HashingHelper.CreatePassword(userForRegisterDto.Password, out byte[] passwordSalt, out byte[] passwordHash);
+            byte[] passwordSalt;
+            byte[] passwordHash;
+            HashingHelper.CreatePassword(userForRegisterDto.Password, out  passwordSalt, out  passwordHash);
             User user = new User()
             {
                 Email = userForRegisterDto.Email,

@@ -25,7 +25,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {
-            if (DateTime.Now.Hour == 16 || DateTime.Now.Hour == 8)
+            if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 5)
             {
                 return new ErrorDataResult<List<Color>>(_colorDal.GetAll(), Messages.ListInMaintenance);
             }

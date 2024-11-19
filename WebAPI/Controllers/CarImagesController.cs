@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         }
 
         //Endpoint
-        [HttpPost]
+        [HttpPost("UploadImage")]
         public IActionResult UploadImage([FromForm] UploadImageDTO fileModel)//Post'un default'u FromBody, Get'in FromQuery,
         {
             var result = _carImageService.UploadImage(fileModel);
@@ -27,17 +27,28 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
-        [HttpGet]
+        [HttpGet("GetAllImage")]
         public IActionResult GetAll()
         {
             var result = _carImageService.GetAll();
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Data);
+            return BadRequest(result);
         }
-        [HttpDelete]
+
+        [HttpGet("GetByCarId")]
+        public IActionResult GetByCarId(int carId)
+        {
+            var result = _carImageService.GetImagesByCarId(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result); 
+        }
+        [HttpDelete("DeleteImage")]
         public IActionResult Delete(int id)
         {
             var result = _carImageService.DeleteImage(id);
@@ -47,7 +58,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
-        [HttpPut]
+        [HttpPut("UpdateImage")]
         public IActionResult Update([FromForm]UploadImageDTO fileModel)
         {
             var result = _carImageService.UpdateImage(fileModel);
