@@ -38,6 +38,8 @@ namespace CoreLayer.DataAccess
             }
 
         }
+
+        //
         public TEntity GetById(Expression<Func<TEntity, bool>> filter = null)
         {
             using (TContext context = new TContext())
