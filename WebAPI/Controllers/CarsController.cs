@@ -88,5 +88,17 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpGet()]
+
+        public IActionResult FilterCars(int brandId,int colorId)
+        {
+            var result = _carService.FilterCars(brandId, colorId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
     }
 }

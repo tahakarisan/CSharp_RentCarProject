@@ -22,7 +22,7 @@ namespace Business.Concrete
         {
             _colorDal = colorDal;
         }
-        [CacheAspect]
+        //[CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 5)

@@ -7,6 +7,11 @@ using CoreLayer.Utilities.IoC;
 using CoreLayer.Utilities.Security.Encryption;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+
+var cultureInfo = new CultureInfo("tr-TR");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +28,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(options =>
 {
     options.RegisterModule(new AutofacBusinessModule());
 });
+
 builder.Services.AddDependencyResolvers(new ICoreModule[] {
                 new CoreModule()
             });
@@ -49,10 +55,13 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+    
     app.UseSwaggerUI();
 }
 app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader());

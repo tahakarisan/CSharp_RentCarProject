@@ -137,6 +137,39 @@ namespace DataAccess.Concrete.EntityFramework
 
             }
         }
+
+        public List<CarDto> FilterCars(int brandId, int colorId)
+        {
+            using (var context = new RentCarContext())
+            {
+                var result = from c in context.Cars
+                             join co in context.Colors
+                             on c.ColorId equals co.Id
+                             join b in context.Brands
+                             on c.BrandId equals b.Id
+                             join cImage in context.CarImages
+                             on c.Id equals cImage.CarId
+                             into carImages
+                             from image in carImages.DefaultIfEmpty()
+                             where c.BrandId == brandId && c.ColorId == colorId
+                             select new CarDto
+                             {
+                                 Id = c.Id,
+                                 BrandId = c.BrandId,
+                                 BrandName = b.BrandName,
+                                 ColorName = co.ColorName,
+                                 DailyPrice = c.DailyPrice,
+                                 Description = c.Description,
+                                 ModelYear = c.ModelYear,
+                                 ImagePath = image.ImagePath == null ? "5c9e290c-1079-4bcf-8913-a97da764e092.jpg" : image.ImagePath.Remove(0, "C:\\Users\\SoftwareHP\\Desktop\\ReCap\\WebAPI\\wwwroot\\images\\".Length)
+
+                             };
+
+                return result.ToList();
+
+
+            }
+        }
     }
 
 

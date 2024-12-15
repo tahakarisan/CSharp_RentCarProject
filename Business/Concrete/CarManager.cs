@@ -123,6 +123,19 @@ namespace Business.Concrete
         {
             return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarDetailByCarId(carId));
         }
+
+        public IDataResult<List<CarDto>> FilterCars(int brandId,int colorId)
+        {
+            var cars = _carDal.FilterCars(brandId,colorId);
+
+            if (cars.Count>0)
+            {
+                return new SuccesfulDataResult<List<CarDto>>(data:cars);
+            }
+
+            return new ErrorDataResult<List<CarDto>>(message:"Listelenemedi");
+
+        }
     }
 
 }
