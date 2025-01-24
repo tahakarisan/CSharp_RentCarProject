@@ -13,6 +13,6 @@ namespace CoreLayer.CrossCuttingConcerns.Validation
                 throw new ValidationException(result.Errors);
             }
         }
-        //sc
+        //scss
     }
 }//Validation
