@@ -11,7 +11,8 @@
 # Note: This is only used by command line
 ###############################################################################
 #*.cs     diff=csharp
-#*.cs linguist-language=C#
+*.cs linguist-language=C#
+*.html linguist-detectable=false
 
 ###############################################################################
 # Set the merge driver for project and solution files
@@ -62,3 +63,9 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+#*.cs linguist-detectable=true
+#*.html linguist-detectable=false
+#*.js linguist-detectable=true
+#*.css linguist-detectable=true
+#*.bin linguist-detectable=false
+#*.obj linguist-detectable=false
