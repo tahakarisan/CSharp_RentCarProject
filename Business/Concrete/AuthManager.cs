@@ -21,12 +21,12 @@ namespace Business.Concrete
             _userService = userService;
             _tokenHelper = tokenHelper;
         }
-
+        
         public IDataResult<AccessToken> CreateToken(User user)
         {
             var result = _userService.GetClaims(user);
             var createToken = _tokenHelper.CreateToken(user, result);
-            return new SuccesfulDataResult<AccessToken>(data:_tokenHelper.CreateToken(user,result));
+            return new SuccesfulDataResult<AccessToken>(data:_tokenHelper.CreateToken(user,result),"Giriş Yapıldı");
         }
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
@@ -36,7 +36,7 @@ namespace Business.Concrete
             {
                 if (HashingHelper.VerifyPassword(userForLoginDto.Password, result.PasswordSalt, result.PasswordHash))
                 {
-                    return new SuccesfulDataResult<User>(data:result, "Giriş Başarılı");
+                    return new SuccesfulDataResult<User>(data:result,"Giriş Başarılı");
                 }
             }
             return new ErrorDataResult<User>("Giriş Yapılamadı");

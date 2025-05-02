@@ -66,5 +66,23 @@ namespace CoreLayer.Utilities.Security.JWT
             claims.AddRoles(operationClaims.Select(p => p.Name).ToArray());
             return claims;
         }
+
+        public UserTokenData DecodeToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var id = int.Parse(jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var emailClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+            var email = emailClaim != null ? emailClaim.Value : null;
+            var name = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+
+            return new UserTokenData
+            {
+                Id = id,
+                Email = email,
+                Name = name,
+            };
+        }
     }
 }

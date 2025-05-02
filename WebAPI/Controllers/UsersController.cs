@@ -27,6 +27,21 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+
+        [HttpGet("getInfoUser")]
+        public IActionResult GetUserByToken(string token)
+        {
+            var result = _userService.GetUserByToken(token);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Message);
+            }
+        }
+
      
         [HttpPost("AddUser")]
         public IActionResult Add(User user)

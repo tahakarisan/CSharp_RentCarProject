@@ -6,6 +6,7 @@ using CoreLayer.Aspects.Autofac;
 using CoreLayer.Entities.Concrete;
 using CoreLayer.Utilities.Business;
 using CoreLayer.Utilities.Results;
+using CoreLayer.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -16,11 +17,13 @@ namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-        IUserDal _userDal;
-        public UserManager(IUserDal userDal)
+        private readonly IUserDal _userDal;
+        private readonly ITokenHelper _tokenHelper;
+
+        public UserManager(IUserDal userDal, ITokenHelper tokenHelper)
         {
             _userDal = userDal;
-
+            _tokenHelper = tokenHelper;
         }
 
         [ValidationAspect(typeof(UserValidator))]
@@ -78,6 +81,26 @@ namespace Business.Concrete
         public IDataResult<List<User>> GetUserById(int id)
         {
             return new SuccesfulDataResult<List<User>>(data: _userDal.GetAll(u => u.Id == id), Messages.UserGetById);
+        }
+
+        public IDataResult<CoreLayer.Entities.Concrete.UserTokenData> GetUserByToken(string token)
+        {
+            var data = _tokenHelper.DecodeToken(token);
+            if (data != null)
+            {
+                var userInfo = _userDal.FirstOrDefault(u => u.Id == data.Id);
+                CoreLayer.Entities.Concrete.UserTokenData userTokenData = new CoreLayer.Entities.Concrete.UserTokenData {
+                    Id = userInfo.Id,
+                    Email = userInfo.Email,
+                    Name = userInfo.FirstName +" "+ userInfo.LastName
+                };
+
+                return new SuccesfulDataResult<CoreLayer.Entities.Concrete.UserTokenData>(data:userTokenData,message:"Kulanıcı Bilgisi Geldi");
+            }
+            else
+            {
+                return new ErrorDataResult<CoreLayer.Entities.Concrete.UserTokenData>(message:"Veri Bulunamadı");
+            }
         }
 
         [ValidationAspect(typeof(UpdateUserValidator))]

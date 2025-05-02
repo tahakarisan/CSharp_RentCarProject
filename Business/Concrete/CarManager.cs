@@ -62,7 +62,7 @@ namespace Business.Concrete
             return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarByColorId(id));
         }
 
-        //[SecuredOperation("admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         //[PerformanceAspect(5)]
         public IResult Add(Car car)

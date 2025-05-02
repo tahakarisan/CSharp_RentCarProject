@@ -13,6 +13,7 @@ namespace Business.Abstract
 {
     public interface IUserService
     {
+        IDataResult<CoreLayer.Entities.Concrete.UserTokenData> GetUserByToken(string token);
         IResult Add(User user);
         User GetByMail(string email);
         IResult CampaignDefine(UserCampaign userCampaign);
