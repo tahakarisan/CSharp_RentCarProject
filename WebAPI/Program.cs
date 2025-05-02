@@ -3,6 +3,7 @@ using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers.Autofac;
 using CoreLayer.DependencyResolvers;
+using CoreLayer.Extensions;
 using CoreLayer.Utilities.IoC;
 using CoreLayer.Utilities.Security.Encryption;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,6 +65,7 @@ if (app.Environment.IsDevelopment())
     
     app.UseSwaggerUI();
 }
+app.ConfigureCustomExceptionMiddleware();
 app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
 app.UseStaticFiles();
 

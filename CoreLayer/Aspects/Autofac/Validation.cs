@@ -18,7 +18,7 @@ namespace CoreLayer.Aspects.Autofac
         {
             if (!typeof(IValidator).IsAssignableFrom(validatorType))
             {
-                throw new System.Exception("Bu sınıf doğrulama sınıflarıyla uyuşmuyor  ");
+                throw new System.Exception("Bu sınıf doğrulama sınıflarıyla uyuşmuyor");
             }
             _validatorType = validatorType;
         }
