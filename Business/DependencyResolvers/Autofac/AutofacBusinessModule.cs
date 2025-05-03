@@ -33,8 +33,10 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();
             builder.RegisterType<RoleManager>().As<IRoleService>().SingleInstance();
+            builder.RegisterType<FavCarManager>().As<IFavCarService>().SingleInstance();
             builder.RegisterType<EFRoleDal>().As<IRoleDal>().SingleInstance();
             builder.RegisterType<EFCampaignDal>().As<ICampaignDal>().SingleInstance();
+            builder.RegisterType<EFFavCarDal>().As<IFavCarDal>().SingleInstance();
             builder.RegisterType<CampaignManager>().As<ICampaignService>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
