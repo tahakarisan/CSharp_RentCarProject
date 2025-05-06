@@ -25,24 +25,24 @@ namespace Business.Concrete
             _userService = userService;
         }
 
-        public IDataResult<List<CarDto>> GetDetail()
+        public IDataResult<List<ImageCarDto>> GetDetail()
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 5)
             {
-                return new ErrorDataResult<List<CarDto>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<ImageCarDto>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarDto(), Messages.CarListed);
+            return new SuccesfulDataResult<List<ImageCarDto>>(data: _carDal.GetCarDto(), Messages.CarListed);
         }
 
 
         //[CacheAspect]
-        public IDataResult<List<CarDto>> GetAll()
+        public IDataResult<List<SoftCarDto>> GetAll()
         {
             if (DateTime.Now.Hour == 3 || DateTime.Now.Hour == 5)
             {
-                return new ErrorDataResult<List<CarDto>>(Messages.ListInMaintenance);
+                return new ErrorDataResult<List<SoftCarDto>>(Messages.ListInMaintenance);
             }
-            return new SuccesfulDataResult<List<CarDto>>(data:_carDal.GetCarDto(), Messages.CarListed);
+            return new SuccesfulDataResult<List<SoftCarDto>>(data:_carDal.GetAllCar(), Messages.CarListed);
         }
 
         [CacheAspect]
@@ -119,9 +119,9 @@ namespace Business.Concrete
             return new SuccesfulDataResult<Car>(data: car);  // Başarılı bir şekilde araç bulundu
         }
 
-        public IDataResult<List<CarDto>> GetDetailByCarId(int carId)
+        public IDataResult<List<ImageCarDto>> GetDetailByCarId(int carId)
         {
-            return new SuccesfulDataResult<List<CarDto>>(data: _carDal.GetCarDetailByCarId(carId));
+            return new SuccesfulDataResult<List<ImageCarDto>>(data: _carDal.GetCarDetailByCarId(carId));
         }
 
         public IDataResult<List<CarDto>> FilterCars(int brandId,int colorId)

@@ -17,7 +17,7 @@ namespace Business.Helpers.FileHelper
             }
             var extent = Path.GetExtension(file.FileName);
             var randomName = $"{Guid.NewGuid()}{extent}";
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", randomName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", randomName);
             try
             {
                 using (var stream = new FileStream(path, FileMode.Create))

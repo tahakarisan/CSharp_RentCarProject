@@ -41,62 +41,74 @@ namespace Business.Concrete
         }
         public IResult UpdateImage(UploadImageDTO fileModel)
         {
-            var oldImage = _carImageDal.GetAll(c=>c.CarId == fileModel.CarId);
-            var oldImageData = oldImage.FirstOrDefault();
-            if (oldImage.Count>0)
+            if (fileModel?.RequestedFormFile == null || !fileModel.RequestedFormFile.Any())
+                return new ErrorResult("Güncellenecek resim bulunamadı.");
+
+            // 1. Eski resimleri sil
+            var existingImages = _carImageDal.GetAll(c => c.CarId == fileModel.CarId);
+            foreach (var image in existingImages)
             {
-                var saveImageResult = FileHelper.AddImage(fileModel.RequestedFormFile);
-
-                if (saveImageResult.Data == null || saveImageResult.Success == true)
-                {
-                    CarImage carImage = new CarImage
-                    {
-                        Id = oldImageData.Id,
-                        CarId = fileModel.CarId,
-                        ImagePath = saveImageResult.Data,
-                        Name = fileModel.Name
-                    };
-                    IResult result = BusinessRules.Run(ImageLimit(carImage));
-                    _carImageDal.Update(carImage);
-                    return new SuccesfullResult("Güncellendi");
-                }
-                if (!saveImageResult.Success)
-                {
-                    return new ErrorResult("Güncellenemedi");
-                }
-
+                _carImageDal.Delete(image.Id);
             }
-            return new ErrorResult("Güncellenemedi");
 
+            // 2. Yeni resimleri ekle
+            foreach (var file in fileModel.RequestedFormFile)
+            {
+                var saveImageResult = FileHelper.AddImage(file);
+                if (!saveImageResult.Success || saveImageResult.Data == null)
+                {
+                    return new ErrorResult("Yeni resim yüklenemedi: " + saveImageResult.Message);
+                }
+
+                var newImage = new CarImage
+                {
+                    CarId = fileModel.CarId,
+                    ImagePath = saveImageResult.Data,
+                    Name = fileModel.Name
+                };
+
+                var ruleResult = BusinessRules.Run(ImageLimit(newImage));
+                if (ruleResult != null) return ruleResult;
+
+                _carImageDal.Add(newImage);
+            }
+
+            return new SuccesfullResult("Resimler başarıyla güncellendi.");
         }
+
 
         public IResult UploadImage(UploadImageDTO fileModel)
         {
-            if (fileModel != null)
+            if (fileModel?.RequestedFormFile == null || !fileModel.RequestedFormFile.Any())
             {
-                var saveImageResult = FileHelper.AddImage(fileModel.RequestedFormFile);
-
-                if (saveImageResult.Data == null || saveImageResult.Success == true)
-                {
-                    CarImage carImage = new CarImage
-                    {
-                        CarId = fileModel.CarId,
-                        ImagePath = saveImageResult.Data,
-                        Name = fileModel.Name
-                    };
-                    IResult result = BusinessRules.Run(ImageLimit(carImage));
-                    _carImageDal.Add(carImage);
-                    return new SuccesfullResult("Eklendi");
-                }
-                if (!saveImageResult.Success)
-                {
-                    return new ErrorResult("Eklenemedi.");
-                }
-
+                return new ErrorResult("Model boş olduğu için eklenemedi");
             }
-            return new ErrorResult("Model boş olduğu için Eklenemedi");
 
+            foreach (var file in fileModel.RequestedFormFile)
+            {
+                var saveImageResult = FileHelper.AddImage(file); 
+
+                if (!saveImageResult.Success || saveImageResult.Data == null)
+                {
+                    return new ErrorResult("Bir resim eklenemedi: " + saveImageResult.Message);
+                }
+
+                CarImage carImage = new CarImage
+                {
+                    CarId = fileModel.CarId,
+                    ImagePath = saveImageResult.Data,
+                    Name = fileModel.Name // İstersen dosya adına göre değiştirebiliriz
+                };
+
+                IResult ruleResult = BusinessRules.Run(ImageLimit(carImage));
+                if (ruleResult != null) return ruleResult;
+
+                _carImageDal.Add(carImage);
+            }
+
+            return new SuccesfullResult("Tüm resimler başarıyla eklendi.");
         }
+
         private IResult ImageLimit(CarImage carImage)
         {
             var result = _carImageDal.GetAll(c => c.CarId == carImage.CarId).Count;
