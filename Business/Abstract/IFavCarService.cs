@@ -12,7 +12,7 @@ namespace Business.Abstract
     {
         IDataResult<List<FavCarDto>> GetFavCarsByUserId(int userId);
         IResult Add(FavCar favCar);
-        IResult Delete(FavCar favCar);
+        IResult Delete(int favCarId, int userId);
         IResult Update(FavCar favCar);
         IDataResult<List<FavCar>> GetAll();
     }

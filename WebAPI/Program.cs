@@ -1,4 +1,4 @@
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers.Autofac;
@@ -53,8 +53,21 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
     };
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        policy => policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+    );
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowOrigin");
+
+
 
 
 

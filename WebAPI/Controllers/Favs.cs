@@ -27,9 +27,9 @@ namespace WebAPI.Controllers
             }
         }
         [HttpDelete("deleteFavCar")]
-        public IActionResult DeleteFavCar(FavCar favCar)
+        public IActionResult DeleteFavCar(int favCarId, int userId)
         {
-            var result = _favCarService.Delete(favCar);
+            var result = _favCarService.Delete(favCarId,userId);
             if (result.Success)
             {
                 return Ok(result);

@@ -31,9 +31,10 @@ namespace Business.Concrete
             }
         }
 
-        public IResult Delete(FavCar favCar)
+        public IResult Delete(int favCarId,int userId)
         {
-            var result = _favCarDal.Delete(favCar.Id);
+            var query = _favCarDal.FirstOrDefault(c => c.UserId == userId && c.Id==favCarId);
+            var result = _favCarDal.Delete(query.Id);
             if (result)
             {
                 return new SuccesfullResult("Favori Araba Silindi");
