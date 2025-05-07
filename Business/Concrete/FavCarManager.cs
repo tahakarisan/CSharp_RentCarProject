@@ -31,19 +31,26 @@ namespace Business.Concrete
             }
         }
 
-        public IResult Delete(int favCarId,int userId)
+        public IResult Delete(int favCarId, int userId)
         {
-            var query = _favCarDal.FirstOrDefault(c => c.UserId == userId && c.Id==favCarId);
-            var result = _favCarDal.Delete(query.Id);
+            var query = _favCarDal.FirstOrDefault(fc=>fc.Id==favCarId && fc.UserId==userId);
+            if (query == null)
+            {
+                return new ErrorResult("Favori araba bulunamadı");
+            }
+
+            bool result = _favCarDal.Delete(query.Id); 
+
             if (result)
             {
-                return new SuccesfullResult("Favori Araba Silindi");
+                return new SuccesfullResult("Favori araba silindi");
             }
             else
             {
-                return new ErrorResult("Favori Araba Silinemedi");
+                return new ErrorResult("Favori araba silinemedi");
             }
         }
+
 
         public IDataResult<List<FavCar>> GetAll()
         {

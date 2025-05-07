@@ -46,14 +46,14 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<CarDto>> GetCarsByBrandId(int brandId)
+        public IDataResult<List<SoftCarDto>> GetCarsByBrandId(int brandId)
         {
             var result = _carDal.GetCarByBrandDto(brandId);
             if (result==null)
             {
-                return new ErrorDataResult<List<CarDto>>(message:"Böyle bir araba yok");
+                return new ErrorDataResult<List<SoftCarDto>>(message:"Böyle bir araba yok");
             }
-            return new SuccesfulDataResult<List<CarDto>>(data:result);
+            return new SuccesfulDataResult<List<SoftCarDto>>(data:result);
         }
 
         [CacheAspect]

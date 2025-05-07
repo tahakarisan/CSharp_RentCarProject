@@ -85,34 +85,35 @@ namespace DataAccess.Concrete.EntityFramework
                 return result.ToList();
             }
         }
-        public List<CarDto> GetCarByBrandDto(int brandId)
+        public List<SoftCarDto> GetCarByBrandDto(int brandId)
         {
             using (RentCarContext context = new RentCarContext())
             {
-
                 var result = from c in context.Cars
-                             join b in context.Brands
-                             on c.BrandId equals b.Id
-                             join co in context.Colors
-                             on c.ColorId equals co.Id
-                             join carImage in context.CarImages
-                                on c.Id equals carImage.CarId into carImages
+                             join b in context.Brands on c.BrandId equals b.Id
+                             join co in context.Colors on c.ColorId equals co.Id
+                             join carImage in context.CarImages on c.Id equals carImage.CarId into carImages
                              from image in carImages.DefaultIfEmpty()
                              where c.BrandId == brandId
-                             select new CarDto
+                             group new { Car = c, Brand = b, Color = co, Image = image } by c.Id into grouped
+                             select new SoftCarDto
                              {
-                                 Id = c.Id,
-                                 BrandName = b.BrandName,
-                                 Description = c.Description,
-                                 DailyPrice = c.DailyPrice,
-                                 ModelYear = c.ModelYear,
-                                 ImagePath = image != null ? image.ImagePath.Remove(0, "C:\\Users\\SoftwareHP\\Desktop\\ReCap\\WebAPI\\wwwroot\\images\\".Length) : "5c9e290c-1079-4bcf-8913-a97da764e092.jpg",
-                                 ColorName = co.ColorName
-
+                                 Id = grouped.Key,
+                                 BrandName = grouped.First().Brand.BrandName,
+                                 Description = grouped.First().Car.Description,
+                                 DailyPrice = grouped.First().Car.DailyPrice,
+                                 ModelYear = grouped.First().Car.ModelYear,
+                                 ColorName = grouped.First().Color.ColorName,
+                                 CoverPath = grouped.First().Image != null && !string.IsNullOrEmpty(grouped.First().Image.ImagePath)
+                                     ? Path.GetFileName(grouped.First().Image.ImagePath)
+                                     : "5c9e290c-1079-4bcf-8913-a97da764e092.jpg"
                              };
+
                 return result.ToList();
             }
         }
+
+
         public List<CarDto> GetCarByColorId(int colorId)
         {
             using (var context = new RentCarContext())
@@ -165,9 +166,7 @@ namespace DataAccess.Concrete.EntityFramework
                                               ? Path.GetFileName(image.ImagePath)
                                               : "5c9e290c-1079-4bcf-8913-a97da764e092.jpg"
                             })
-            .AsEnumerable();    // ← buradan sonrası LINQ-to-Objects
-
-                // 2) Bellekte grupla, DTO’ya dönüştür
+            .AsEnumerable(); 
                 var result = flat
                     .GroupBy(x => x.Id)
                     .Select(g => new ImageCarDto

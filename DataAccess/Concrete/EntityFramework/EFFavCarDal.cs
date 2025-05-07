@@ -4,6 +4,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.Context;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,17 +26,20 @@ namespace DataAccess.Concrete.EntityFramework
                              into carImages
                              from image in carImages.DefaultIfEmpty()
                              where fc.UserId == userId
+                             group new { fc,c,br, co, image } by c.Id into grouped
                              select new FavCarDto
                              {
-                                 Id = fc.Id,
-                                 UserId = fc.UserId,
-                                 CarId = c.Id,
-                                 ColorName = co.ColorName,
-                                 BrandName = br.BrandName,
-                                 ModelYear = c.ModelYear,
-                                 DailyPrice = c.DailyPrice,
-                                 Description = c.Description,
-                                 ImagePath = image.ImagePath == null ? "5c9e290c-1079-4bcf-8913-a97da764e092.jpg" : image.ImagePath.Remove(0, "C:\\Users\\SoftwareHP\\Desktop\\ReCap\\WebAPI\\wwwroot\\images\\".Length)
+                                 Id = grouped.First().fc.Id,
+                                 UserId = grouped.First().fc.UserId,
+                                 CarId = grouped.First().c.Id,
+                                 ColorName = grouped.First().co.ColorName,
+                                 BrandName = grouped.First().br.BrandName,
+                                 ModelYear = grouped.First().c.ModelYear,
+                                 DailyPrice = grouped.First().c.DailyPrice,
+                                 Description = grouped.First().c.Description,
+                                 ImagePath = grouped.FirstOrDefault().image != null && !string.IsNullOrEmpty(grouped.FirstOrDefault().image.ImagePath)
+                                             ? Path.GetFileName(grouped.FirstOrDefault().image.ImagePath)
+                                             : "5c9e290c-1079-4bcf-8913-a97da764e092.jpg"
 
                              };
                 return result.ToList();
