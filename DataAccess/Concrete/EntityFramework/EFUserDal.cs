@@ -3,6 +3,7 @@ using CoreLayer.Entities.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.Context;
 using Entities.Concrete;
+using Entities.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,27 @@ namespace DataAccess.Concrete.EntityFramework
 
             }
         }
+
+        public UserDto? GetUserById(int userId)
+        {
+            using (var context = new RentCarContext())
+            {
+                var userDto = context.Users
+                    .Where(u => u.Id == userId)
+                    .Select(u => new UserDto
+                    {
+                        Id = u.Id,
+                        Email = u.Email,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        Status = u.Status
+                    })
+                    .FirstOrDefault();
+
+                return userDto;
+            }
+        }
+
         public bool DefineCampaign(UserCampaign userCampaign)
         {
             using (var context = new RentCarContext())

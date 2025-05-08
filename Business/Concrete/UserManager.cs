@@ -9,6 +9,7 @@ using CoreLayer.Utilities.Results;
 using CoreLayer.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,9 +79,9 @@ namespace Business.Concrete
         {
            return _userDal.GetClaims(user); 
         }
-        public IDataResult<List<User>> GetUserById(int id)
+        public IDataResult<UserDto> GetUserById(int id)
         {
-            return new SuccesfulDataResult<List<User>>(data: _userDal.GetAll(u => u.Id == id), Messages.UserGetById);
+            return new SuccesfulDataResult<UserDto>(data: _userDal.GetUserById(id), Messages.UserGetById);
         }
 
         public IDataResult<CoreLayer.Entities.Concrete.UserTokenData> GetUserByToken(string token)
@@ -109,6 +110,7 @@ namespace Business.Concrete
             _userDal.Update(user);
             return new SuccesfullResult(Messages.UserUpdated);
         }
+
 
         private IResult IsExistEmail(User user)
         {
