@@ -14,16 +14,16 @@ namespace WebAPI.Controllers
         {
             _roleService = roleService;
         }
-        [HttpGet("UserRoleList")]
-        public IActionResult GetUserRoles(UserOperationClaim userOperationClaim)
-        {
-            var result = _roleService.GetUserRoles(userOperationClaim);
+        //[HttpGet("UserRoleList")]
+        //public IActionResult GetUserRoles()
+        /*{
+            var result = _roleService.g();
             if (result.Success)
             {
                 return Ok(result.Data);
             }
             return BadRequest(result.Message);
-        }
+        }*/
         [HttpPost("AddUserRole")]
         public IActionResult AddUser(UserOperationClaim userOperationClaim)
         {
@@ -44,5 +44,28 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+
+        [HttpGet("getUserRoleDto")]
+        public IActionResult GetUserRoleDtos()
+        {
+            var result = _roleService.GetUserRoleDtos();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("getRoles")]
+        public IActionResult GetRoles()
+        {
+            var result = _roleService.GetAllRole();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
     }
 }

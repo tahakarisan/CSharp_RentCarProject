@@ -3,6 +3,7 @@ using Business.BusinessAspect.Autofac;
 using CoreLayer.Entities.Concrete;
 using CoreLayer.Utilities.Results;
 using DataAccess.Abstract;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Business.Concrete
             _userService = userService;
             _roleDal = roleDal;
         }
+
         [SecuredOperation("ceo")]
         public IResult AddRole(UserOperationClaim userOperationClaim)
         {
@@ -46,6 +48,32 @@ namespace Business.Concrete
             }
             _roleDal.Delete(userOperationClaim.Id);
             return new SuccesfullResult("Rol başarıyla silindi");
+        }
+
+        public IDataResult<List<UserOperationClaim>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<List<OperationClaim>> GetAllRole()
+        {
+            var response = _roleDal.GetRoles();
+            if (response.Count > 0)
+            {
+                return new SuccesfulDataResult<List<OperationClaim>>(data:response);
+            }
+            return new ErrorDataResult<List<OperationClaim>>(message:"Roller Getirilemedi");
+
+        }
+
+        public IDataResult<List<UserRoleDto>> GetUserRoleDtos()
+        {
+            var response = _roleDal.GetUserRoleDtos();
+            if (response.Count > 0)
+            {
+                return new SuccesfulDataResult<List<UserRoleDto>>(data:response);
+            }
+            return new ErrorDataResult<List<UserRoleDto>>("Kullanıcı Rolleri Getirilemedi");
         }
 
         public IDataResult<List<UserOperationClaim>> GetUserRoles(UserOperationClaim userOperationClaim)

@@ -1,4 +1,5 @@
 ﻿using CoreLayer.Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace DataAccess.Abstract
 {
     public interface IRoleDal : IEntityRepository<UserOperationClaim>
     {
+        List<OperationClaim> GetRoles();
+        List<UserRoleDto> GetUserRoleDtos();
     }
 }

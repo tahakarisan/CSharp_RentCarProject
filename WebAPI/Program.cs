@@ -36,9 +36,10 @@ builder.Host.ConfigureContainer<ContainerBuilder>(options =>
     options.RegisterModule(new AutofacBusinessModule());
 });
 
-builder.Services.AddDependencyResolvers(new ICoreModule[] {
+builder.Services.AddDependencyResolvers(new ICoreModule[]
+{
                 new CoreModule()
-            });
+});
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<CoreLayer.Utilities.Security.JWT.TokenOptions>();
 
 builder.Services.AddAuthentication(options =>
@@ -59,15 +60,22 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
     };
 });
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // PascalCase için
+    });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin",
         policy => policy
-            .WithOrigins("http://localhost:4200")
+            .WithOrigins("http://localhost:4200", "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
     );
 });
+
 
 var app = builder.Build();
 
@@ -81,7 +89,7 @@ app.UseCors("AllowOrigin");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    
+
     app.UseSwaggerUI();
 }
 app.ConfigureCustomExceptionMiddleware();
